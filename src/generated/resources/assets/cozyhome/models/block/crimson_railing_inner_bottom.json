@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/railing/inner_railing_bottom",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "minecraft:block/crimson_planks",
+    "side": "cozyhome:block/railing/crimson_railing_parts",
+    "top": "cozyhome:block/railing/crimson_railing"
+  }
+}

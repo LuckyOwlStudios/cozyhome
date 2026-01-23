@@ -1,0 +1,8 @@
+{
+  "parent": "cozyhome:block/short_table/short_table_middle_piece",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "sides": "cozyhome:block/table/acacia_table_sides",
+    "top": "cozyhome:block/table/acacia_table_top"
+  }
+}

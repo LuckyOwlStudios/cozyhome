@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cozyhome:block/bamboo_sink_counter",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cozyhome:block/bamboo_sink_counter"
+    },
+    "facing=south": {
+      "model": "cozyhome:block/bamboo_sink_counter",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cozyhome:block/bamboo_sink_counter",
+      "y": 270
+    }
+  }
+}

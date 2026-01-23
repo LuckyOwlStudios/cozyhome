@@ -1,0 +1,8 @@
+{
+  "parent": "cozyhome:block/table/table_right_side",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "sides": "cozyhome:block/table/crimson_table_sides",
+    "top": "cozyhome:block/table/crimson_table_top"
+  }
+}

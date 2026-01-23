@@ -1,0 +1,18 @@
+// 1.21.1	2025-12-09T21:08:39.8178914	Tags for minecraft:item mod id cozyhome
+85bc1fb09531a543724d2d10f07218193a508a97 data/c/tags/item/dyed.json
+c991dfed5ea3be8a5ba7d14747c213d165f99122 data/c/tags/item/dyed/black.json
+38c53eb12eadd6210e2dd75827c8b8ab74613458 data/c/tags/item/dyed/blue.json
+488cc24eb4cc710508d9c8a1227feb61835a5924 data/c/tags/item/dyed/brown.json
+584aff2a7209f1c4525bc7eb685466e18c759d2a data/c/tags/item/dyed/cyan.json
+8fd992e71a7a0ab63e2503fffe392768dc2b6193 data/c/tags/item/dyed/gray.json
+39c187d02aeb02414f2fd7c3970786b44b0bd3ee data/c/tags/item/dyed/green.json
+1f35c181faf2fc567d4f28e1b9de7e0ee89da8fa data/c/tags/item/dyed/light_blue.json
+bf1cac78cc0c28141f5bdd121086656b2d60b22d data/c/tags/item/dyed/light_gray.json
+16de682c6323e23f2a1a77b17d3a8b1c31b41cc4 data/c/tags/item/dyed/lime.json
+fd67ba656c277e8b347fbc5e0c34fc8b13535d1d data/c/tags/item/dyed/magenta.json
+36175cae563d8e21c2c68813ecd68787aa974595 data/c/tags/item/dyed/orange.json
+d8481c31756869f58ba9e7a1e0122309cbc89a0e data/c/tags/item/dyed/pink.json
+4abf68d0b121bf21a815e358e2952c23b4a3931f data/c/tags/item/dyed/purple.json
+cca183f53d0d4efc0c09f57f56958238521dd204 data/c/tags/item/dyed/red.json
+50788a16f39124c6a1d71617f95fe92a3c6c10da data/c/tags/item/dyed/white.json
+209a899855f689f52bd49fcd0f1fa1b0ab307e01 data/c/tags/item/dyed/yellow.json

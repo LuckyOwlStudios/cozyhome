@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/railing/railing",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "minecraft:block/dark_oak_planks",
+    "side": "cozyhome:block/railing/dark_oak_railing_parts",
+    "top": "cozyhome:block/railing/dark_oak_railing"
+  }
+}

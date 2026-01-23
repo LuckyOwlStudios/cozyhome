@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/railing/inner_railing",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "minecraft:block/mangrove_planks",
+    "side": "cozyhome:block/railing/mangrove_railing_parts",
+    "top": "cozyhome:block/railing/mangrove_railing"
+  }
+}

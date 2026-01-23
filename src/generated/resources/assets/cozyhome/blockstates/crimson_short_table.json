@@ -1,0 +1,226 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table"
+      },
+      "when": {
+        "east": "false",
+        "north": "false",
+        "north_east": "false",
+        "north_west": "false",
+        "south": "false",
+        "south_east": "false",
+        "south_west": "false",
+        "west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_middle_piece"
+      },
+      "when": {
+        "north": "true",
+        "north_west": "true",
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_middle_piece",
+        "y": 90
+      },
+      "when": {
+        "east": "true",
+        "north": "true",
+        "north_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_middle_piece",
+        "y": 180
+      },
+      "when": {
+        "east": "true",
+        "south": "true",
+        "south_east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_middle_piece",
+        "y": 270
+      },
+      "when": {
+        "south": "true",
+        "south_west": "true",
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_inner_corner"
+      },
+      "when": {
+        "north": "true",
+        "north_west": "false",
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_inner_corner",
+        "y": 90
+      },
+      "when": {
+        "east": "true",
+        "north": "true",
+        "north_east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_inner_corner",
+        "y": 180
+      },
+      "when": {
+        "east": "true",
+        "south": "true",
+        "south_east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_inner_corner",
+        "y": 270
+      },
+      "when": {
+        "south": "true",
+        "south_west": "false",
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_outer_corner"
+      },
+      "when": {
+        "north": "false",
+        "north_west": "false",
+        "west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_outer_corner",
+        "y": 90
+      },
+      "when": {
+        "east": "false",
+        "north": "false",
+        "north_east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_outer_corner",
+        "y": 180
+      },
+      "when": {
+        "east": "false",
+        "south": "false",
+        "south_east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_outer_corner",
+        "y": 270
+      },
+      "when": {
+        "south": "false",
+        "south_west": "false",
+        "west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_left_side"
+      },
+      "when": {
+        "east": "false",
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_left_side",
+        "y": 90
+      },
+      "when": {
+        "south": "false",
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_left_side",
+        "y": 180
+      },
+      "when": {
+        "north": "true",
+        "west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_left_side",
+        "y": 270
+      },
+      "when": {
+        "east": "true",
+        "north": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_right_side"
+      },
+      "when": {
+        "south": "true",
+        "west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_right_side",
+        "y": 90
+      },
+      "when": {
+        "north": "false",
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_right_side",
+        "y": 180
+      },
+      "when": {
+        "east": "false",
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/crimson_short_table_right_side",
+        "y": 270
+      },
+      "when": {
+        "east": "true",
+        "south": "false"
+      }
+    }
+  ]
+}

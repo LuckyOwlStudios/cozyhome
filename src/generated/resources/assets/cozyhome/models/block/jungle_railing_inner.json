@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/railing/inner_railing",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "minecraft:block/jungle_planks",
+    "side": "cozyhome:block/railing/jungle_railing_parts",
+    "top": "cozyhome:block/railing/jungle_railing"
+  }
+}

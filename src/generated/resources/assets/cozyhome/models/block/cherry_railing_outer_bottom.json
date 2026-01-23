@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/railing/outer_railing_bottom",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "minecraft:block/cherry_planks",
+    "side": "cozyhome:block/railing/cherry_railing_parts",
+    "top": "cozyhome:block/railing/cherry_railing"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "vertical_connection=bottom": {
+      "model": "cozyhome:block/birch_planked_wall_bottom"
+    },
+    "vertical_connection=middle": {
+      "model": "cozyhome:block/birch_planked_wall_middle"
+    },
+    "vertical_connection=none": {
+      "model": "cozyhome:block/birch_planked_wall"
+    },
+    "vertical_connection=top": {
+      "model": "cozyhome:block/birch_planked_wall_top"
+    }
+  }
+}

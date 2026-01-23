@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/table/table",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "legs": "cozyhome:block/table/cherry_table_legs",
+    "sides": "cozyhome:block/table/cherry_table_sides",
+    "top": "cozyhome:block/table/cherry_table_top"
+  }
+}

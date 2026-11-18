@@ -12,9 +12,6 @@ def commonResourcesDir = project(':common').file('src/main/resources').absoluteP
 
 loom {
 	accessWidenerPath = project(':common').loom.accessWidenerPath
-	// Every Compat's NeoForge jar points at an access widener it doesn't ship, which breaks Loom's
-	// transitive access widener step. Cozyhome doesn't rely on other mods' access wideners.
-	enableTransitiveAccessWideners = false
 
 	runs {
 		// NeoForge data generation. Writes into common/src/main/generated so both loaders get the output.
@@ -55,15 +52,9 @@ configurations {
 dependencies {
 	neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
 
-	// Every Compat: compile against it, and load it in dev runs only (never a dependency of the released jar).
-	modCompileOnly("maven.modrinth:every-compat:$rootProject.everycomp_neoforge_version") { transitive = false }
-	modCompileOnly("maven.modrinth:moonlight:$rootProject.moonlight_neoforge_version") { transitive = false }
-	modLocalRuntime("maven.modrinth:every-compat:$rootProject.everycomp_neoforge_version") { transitive = false }
-	modLocalRuntime("maven.modrinth:moonlight:$rootProject.moonlight_neoforge_version") { transitive = false }
-	if (rootProject.dev_wood_mods.toBoolean()) {
-		modLocalRuntime("maven.modrinth:natures-spirit:$rootProject.natures_spirit_neoforge_version") { transitive = false }
-		modLocalRuntime("maven.modrinth:XaDC71GB:$rootProject.lithostitched_neoforge_version") { transitive = false }
-	}
+	// Every Compat isn't loaded in NeoForge dev runs: its NeoForge jar names an access widener
+	// (everycomp.accesswidener) that it doesn't ship, so Loom 1.7 can't remap it. Use Fabric's runClient
+	// to try the integration. The released jar works with Every Compat on both loaders.
 
 	common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
 	shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')

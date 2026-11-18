@@ -11,6 +11,7 @@ public class ModFuels {
     }
 
     public static void registerFuels(FuelRegistrar fuels) {
+        fuels.add(ModBlocks.CARPENTRY_TABLE, 300);
         fuels.add(ModBlocks.OAK_TABLE, 300);
         fuels.add(ModBlocks.SPRUCE_TABLE, 300);
         fuels.add(ModBlocks.BIRCH_TABLE, 300);

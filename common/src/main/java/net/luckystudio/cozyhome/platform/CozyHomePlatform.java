@@ -1,6 +1,9 @@
 package net.luckystudio.cozyhome.platform;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.block.Block;
+import net.minecraft.util.Identifier;
+import net.minecraft.world.poi.PointOfInterestType;
 
 /**
  * Small bridge to loader-specific behaviour.
@@ -14,6 +17,15 @@ public final class CozyHomePlatform {
 
     @ExpectPlatform
     public static boolean isModLoaded(String modId) {
+        throw new AssertionError();
+    }
+
+    /**
+     * Registers a point of interest type for every state of {@code block}. Vanilla keeps a separate
+     * blockstate to POI map that each loader fills in its own way, so this can't use Registry.register directly.
+     */
+    @ExpectPlatform
+    public static PointOfInterestType registerPointOfInterest(Identifier id, int ticketCount, int searchDistance, Block block) {
         throw new AssertionError();
     }
 }

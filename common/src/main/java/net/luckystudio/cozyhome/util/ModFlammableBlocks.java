@@ -149,5 +149,8 @@ public class ModFlammableBlocks {
         flammableBlockRegistry.add(ModBlocks.MANGROVE_LARGE_STUMP, 5, 20);
         flammableBlockRegistry.add(ModBlocks.CHERRY_LARGE_STUMP, 5, 20);
         flammableBlockRegistry.add(ModBlocks.BAMBOO_LARGE_STUMP, 5, 20);
+
+        // VILLAGER JOB SITES
+        flammableBlockRegistry.add(ModBlocks.CARPENTRY_TABLE, 5, 20);
     }
 }

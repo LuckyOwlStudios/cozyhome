@@ -273,6 +273,8 @@
   "block.cozyhome.purpur_fountain_spout": "Purpur Fountain Spout",
   "block.cozyhome.dye_vat": "Чан с красителем",
   "block.cozyhome.telescope": "Телескоп",
+  "block.cozyhome.carpentry_table": "Плотницкий стол",
+  "entity.minecraft.villager.carpenter": "Плотник",
   "blocks.cozyhome.chairs": "Стулья",
   "blocks.cozyhome.sofas": "Диваны",
   "blocks.cozyhome.couches": "Кресла",

@@ -8,6 +8,8 @@ import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.util.ModFlammableBlocks;
 import net.luckystudio.cozyhome.util.ModFuels;
 import net.luckystudio.cozyhome.util.ModTrades;
+import net.luckystudio.cozyhome.villager.CarpenterTrades;
+import net.luckystudio.cozyhome.villager.ModVillagers;
 
 public class CozyHomeFabric implements ModInitializer {
 	@Override
@@ -20,6 +22,10 @@ public class CozyHomeFabric implements ModInitializer {
 		// Registering Villager Trades
 		TradeOfferHelper.registerVillagerOffers(ModTrades.TELESCOPE_PROFESSION, ModTrades.TELESCOPE_LEVEL,
 				factories -> factories.add(ModTrades.TELESCOPE));
+
+		// Carpenter villager trades, levels 1 to 5
+		CarpenterTrades.TRADES.forEach((level, trades) ->
+				TradeOfferHelper.registerVillagerOffers(ModVillagers.CARPENTER, level, factories -> factories.addAll(trades)));
 
 		// Wandering trader now sells trader themed furniture
 		TradeOfferHelper.registerWanderingTraderOffers(1, factories -> factories.add(ModTrades.TRADER_CUSHION));

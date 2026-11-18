@@ -59,7 +59,7 @@ public class LampBlockEntity extends BlockEntity {
         super.removeFromCopiedStackNbt(nbt);
     }
 
-    @Override
+    // Used by Fabric API's block entity render data (no override in common, since Fabric API isn't available here)
     public @Nullable Object getRenderData() {
         return (this.getComponents().contains(DataComponentTypes.DYED_COLOR)) ? this.getComponents().get(DataComponentTypes.DYED_COLOR).rgb() : -17170434;
     }

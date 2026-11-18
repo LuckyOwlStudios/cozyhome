@@ -13,7 +13,7 @@ public class CouchBlockEntity extends SeatWithCushionBlockEntity {
         super(ModBlockEntityTypes.COUCH_BLOCK_ENTITY, pos, state); // Pass the correct BlockEntityType here
     }
 
-    @Override
+    // Used by Fabric API's block entity render data (no override in common, since Fabric API isn't available here)
     public @Nullable Object getRenderData() {
         return (this.getComponents().contains(DataComponentTypes.DYED_COLOR)) ? this.getComponents().get(DataComponentTypes.DYED_COLOR).rgb() : -17170434;
     }

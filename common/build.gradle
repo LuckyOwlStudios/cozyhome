@@ -21,4 +21,8 @@ dependencies {
 	// We depend on Fabric Loader here only to use the @Environment annotations and mixin dependencies.
 	// Do NOT use other classes from Fabric Loader (or Fabric API) in common code.
 	modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+
+	// Every Compat API, compile only. The integration in compat/everycomp is only loaded when it's installed.
+	modCompileOnly("maven.modrinth:every-compat:$rootProject.everycomp_fabric_version") { transitive = false }
+	modCompileOnly("maven.modrinth:moonlight:$rootProject.moonlight_fabric_version") { transitive = false }
 }

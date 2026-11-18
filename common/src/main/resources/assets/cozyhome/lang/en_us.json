@@ -400,5 +400,13 @@
   "cozyhome.color.purple": "Purple",
   "cozyhome.color.magenta": "Magenta",
   "cozyhome.color.pink": "Pink",
-  "cozyhome.dyed_name": "%s %s"
+  "cozyhome.dyed_name": "%s %s",
+  "block_type.cozyhome.counter": "%s Counter",
+  "block_type.cozyhome.sink_counter": "%s Sink Counter",
+  "block_type.cozyhome.table": "%s Table",
+  "block_type.cozyhome.desk": "%s Desk",
+  "block_type.cozyhome.drawer": "%s Drawer",
+  "block_type.cozyhome.wall_mirror": "%s Wall Mirror",
+  "block_type.cozyhome.couch": "%s Couch",
+  "block_type.cozyhome.large_stump": "%s Large Stump"
 }

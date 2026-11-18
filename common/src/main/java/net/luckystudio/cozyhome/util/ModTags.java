@@ -22,6 +22,9 @@ public class ModTags {
 
     public static class Items {
 
+        /** Furniture that can be dyed in the crafting grid with {@link net.luckystudio.cozyhome.recipe.FurnitureDyeRecipe}. */
+        public static final TagKey<Item> DYEABLE_FURNITURE = createTag("dyeable_furniture");
+
         private static TagKey<Item> createTag(String name) {
             return  TagKey.of(RegistryKeys.ITEM, Identifier.of(CozyHome.MOD_ID, name));
         }

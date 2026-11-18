@@ -6,6 +6,7 @@ import net.luckystudio.cozyhome.components.ModDataComponents;
 import net.luckystudio.cozyhome.entity.ModEntities;
 import net.luckystudio.cozyhome.item.ModItemGroups;
 import net.luckystudio.cozyhome.item.ModItems;
+import net.luckystudio.cozyhome.recipe.ModRecipes;
 import net.luckystudio.cozyhome.screen.ModScreenHandlers;
 import net.luckystudio.cozyhome.util.ModSoundEvents;
 import net.minecraft.util.Identifier;
@@ -33,6 +34,7 @@ public class CozyHome {
 		ModItemGroups.registerModItemGroups();
 		ModSoundEvents.registerSounds();
 		ModDataComponents.registerModDataComponents();
+		ModRecipes.registerRecipes();
 	}
 
 	public static Identifier id(String path) {

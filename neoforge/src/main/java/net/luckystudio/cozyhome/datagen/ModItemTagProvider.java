@@ -3,6 +3,7 @@ package net.luckystudio.cozyhome.datagen;
 import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.block.ModBlocks;
 import net.luckystudio.cozyhome.item.ModItems;
+import net.luckystudio.cozyhome.util.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataOutput;
 import net.minecraft.data.server.tag.ItemTagProvider;
@@ -23,8 +24,12 @@ public class ModItemTagProvider extends ItemTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+        // Only the paint brush uses vanilla's blending dye recipe. Furniture is dyed to exactly one
+        // dye color by FurnitureDyeRecipe instead, so it lives in its own tag.
         getOrCreateTagBuilder(ItemTags.DYEABLE)
-                .add(ModItems.PAINT_BRUSH)
+                .add(ModItems.PAINT_BRUSH);
+
+        getOrCreateTagBuilder(ModTags.Items.DYEABLE_FURNITURE)
                 .add(ModItems.CUSHION)
 
                 .add(ModBlocks.OAK_LAMP.asItem())

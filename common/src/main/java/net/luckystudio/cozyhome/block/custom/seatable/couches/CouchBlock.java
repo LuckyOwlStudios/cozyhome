@@ -112,21 +112,9 @@ public class CouchBlock extends AbstractSeatBlock implements ConnectingBlock {
             // Get the item stack that is currently stored in the block
             ItemStack storedItem = couchBlockEntity.getStack();
 
-            if (stack.getItem() instanceof DyeItem dyeItem) {
-                final int itemColor = dyeItem.getColor().getEntityColor();
-                final int blockColor = ModColorHandler.getBlockColor(couchBlockEntity, -17170434);
-                final int newColor = ColorHelper.Argb.averageArgb(blockColor, itemColor);
-                if (blockColor == newColor) {
-                    player.sendMessage(Text.translatable("message.cozyhome.same_color"), true);
-                    return ItemActionResult.SUCCESS;
-                }
-                ComponentMap components = ComponentMap.builder().add(DataComponentTypes.DYED_COLOR, new DyedColorComponent(newColor, false)).build();
-                couchBlockEntity.setComponents(components);
-
-                stack.decrementUnlessCreative(1, player);
-                couchBlockEntity.markDirty();
-                world.updateListeners(pos, state, state, 0);
-                return ItemActionResult.SUCCESS;
+            ItemActionResult dyeResult = ModColorHandler.tryDyeBlock(stack, state, world, pos, player, couchBlockEntity);
+            if (dyeResult != null) {
+                return dyeResult;
             }
 
             // Check if the item in hand is a valid tool or weapon.
@@ -255,9 +243,4 @@ public class CouchBlock extends AbstractSeatBlock implements ConnectingBlock {
         return state.rotate(mirror.getRotation(state.get(FACING)));
     }
 
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        tooltip.add(Text.translatable("tooltip.cozyhome.dyeable").formatted(Formatting.GRAY));
-    }
 }

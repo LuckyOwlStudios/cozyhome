@@ -42,16 +42,9 @@ public class IronLampBlock extends AbstractLampBlock {
         };
     }
 
-    // Gives the Iron Lamp that default looking color we all know
+    // Gives the lamp its signature look until it is dyed
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        if (world.getBlockEntity(pos) instanceof LampBlockEntity lampBlockEntity) {
-            final int color = DyedColorComponent.getColor(itemStack, -1005508);
-            ComponentMap components = ComponentMap.builder().add(DataComponentTypes.DYED_COLOR, new DyedColorComponent(color, false)).build();
-            lampBlockEntity.setComponents(components);
-            lampBlockEntity.markDirty();
-            world.updateListeners(pos, state, state, 0);
-        }
-        super.onPlaced(world, pos, state, placer, itemStack);
+    public int getDefaultColor() {
+        return -1005508;
     }
 }

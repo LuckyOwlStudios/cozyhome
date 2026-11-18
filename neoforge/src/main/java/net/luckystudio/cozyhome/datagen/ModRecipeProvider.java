@@ -3,8 +3,10 @@ package net.luckystudio.cozyhome.datagen;
 import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.block.ModBlocks;
 import net.luckystudio.cozyhome.item.ModItems;
+import net.luckystudio.cozyhome.recipe.FurnitureDyeRecipe;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataOutput;
+import net.minecraft.data.server.recipe.ComplexRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeProvider;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
@@ -326,6 +328,9 @@ public class ModRecipeProvider extends RecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
+
+        // Dyeing furniture in the crafting grid (exact dye color, no blending)
+        ComplexRecipeJsonBuilder.create(FurnitureDyeRecipe::new).offerTo(exporter, CozyHome.id("furniture_dye"));
 
         // Counters
         offerCounterRecipe(exporter, ModBlocks.OAK_COUNTER, Blocks.BRICKS, Blocks.OAK_PLANKS);

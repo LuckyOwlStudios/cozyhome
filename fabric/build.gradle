@@ -35,10 +35,8 @@ dependencies {
 	modCompileOnly("maven.modrinth:every-compat:$rootProject.everycomp_fabric_version") { transitive = false }
 	modLocalRuntime("maven.modrinth:every-compat:$rootProject.everycomp_fabric_version") { transitive = false }
 	modLocalRuntime("maven.modrinth:moonlight:$rootProject.moonlight_fabric_version") { transitive = false }
-	if (rootProject.dev_wood_mods.toBoolean()) {
-		modLocalRuntime("maven.modrinth:natures-spirit:$rootProject.natures_spirit_fabric_version") { transitive = false }
-		modLocalRuntime("maven.modrinth:XaDC71GB:$rootProject.lithostitched_fabric_version") { transitive = false }
-	}
+	// No sample wood mod on Fabric yet: Nature's Spirit / Lithostitched ship an access widener in a newer
+	// format than Loom 1.7 (and Fabric Loader 0.16) can read. Any wood mod built with an older Loom works here.
 
 	common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
 	shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

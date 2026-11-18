@@ -804,13 +804,9 @@ public class ModModelProvider implements DataProvider {
                 {Properties.EAST, Properties.SOUTH}
         };
 
-        MultipartBlockStateSupplier supplier = MultipartBlockStateSupplier.create(block)
-                .with(When.create()
-                                .set(Properties.NORTH, false).set(Properties.EAST, false)
-                                .set(Properties.SOUTH, false).set(Properties.WEST, false)
-                                .set(ModProperties.NORTH_EAST, false).set(ModProperties.NORTH_WEST, false)
-                                .set(ModProperties.SOUTH_EAST, false).set(ModProperties.SOUTH_WEST, false),
-                        BlockStateVariant.create().put(VariantSettings.MODEL, full));
+        // No separate part for a lone table: the four outer corners already make up the whole
+        // table, and drawing the full model on top of them made the faces z-fight.
+        MultipartBlockStateSupplier supplier = MultipartBlockStateSupplier.create(block);
 
         for (int i = 0; i < 4; i++) {
             BooleanProperty[] q = quarters[i];

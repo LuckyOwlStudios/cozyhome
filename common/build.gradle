@@ -1,0 +1,24 @@
+architectury {
+	common rootProject.enabled_platforms.split(',')
+}
+
+loom {
+	accessWidenerPath = file('src/main/resources/cozyhome.accesswidener')
+}
+
+sourceSets {
+	main {
+		resources {
+			// Output of the data generators (run them with `./gradlew :neoforge:runData`).
+			// Both loaders ship these files.
+			srcDir 'src/main/generated'
+			exclude '.cache/**'
+		}
+	}
+}
+
+dependencies {
+	// We depend on Fabric Loader here only to use the @Environment annotations and mixin dependencies.
+	// Do NOT use other classes from Fabric Loader (or Fabric API) in common code.
+	modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+}

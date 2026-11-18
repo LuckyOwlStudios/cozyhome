@@ -1,25 +1,24 @@
+**DESCRIPTION**
+This mod adds furniture into the game
 
-Installation information
-=======
+## Project layout
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+Cozy Home is built for both **Fabric** and **NeoForge** (Minecraft 1.21.1) using
+[Architectury Loom](https://docs.architectury.dev/). The code still uses Yarn mappings everywhere.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+| Folder | What goes there |
+| --- | --- |
+| `common/` | Almost everything: blocks, items, block entities, renderers, models, assets and data. No Fabric API or NeoForge classes here. |
+| `fabric/` | Fabric entrypoints and `fabric.mod.json`. |
+| `neoforge/` | NeoForge entrypoints, `META-INF/neoforge.mods.toml`, and the data generators. |
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+Things that need a loader API (fuels, flammable blocks, villager trades, client renderer registration,
+`isModLoaded`) are written once in `common/` and handed a small registrar by each loader:
+see `ModFuels`, `ModFlammableBlocks`, `ModTrades`, `ModRenderLayers`, `CozyHomeClient` and `CozyHomePlatform`.
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+## Building
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+- `./gradlew build` builds both jars, into `fabric/build/libs/` and `neoforge/build/libs/`.
+- `./gradlew :fabric:runClient` / `./gradlew :neoforge:runClient` start a dev client for each loader.
+- `./gradlew :neoforge:runData` regenerates models, recipes, loot tables and tags into
+  `common/src/main/generated/`, which both loaders ship.

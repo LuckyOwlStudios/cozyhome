@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"all": "cozyhome:block/table/bamboo_table"
+		"all": "cozyhome:block/table/undead_table"
 	},
 	"elements": [
 		{

@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [128, 128],
 	"textures": {
-		"all": "cozyhome:block/table/bamboo_table",
-		"particle": "cozyhome:block/table/warped_table"
+		"all": "cozyhome:block/table/undead_table",
+		"particle": "cozyhome:block/table/undead_table"
 	},
 	"elements": [
 		{

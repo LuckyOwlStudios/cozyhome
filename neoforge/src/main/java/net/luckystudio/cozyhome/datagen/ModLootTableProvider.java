@@ -47,6 +47,19 @@ public class ModLootTableProvider extends BlockLootTableGenerator {
         // Blocks that save the color they are dyed do not get registered here as they had a custom method that determines their drops
         // and that method is called in the block's constructor.
 
+        // PLANKED WALLS
+        addDrop(ModBlocks.OAK_PLANKED_WALL);
+        addDrop(ModBlocks.SPRUCE_PLANKED_WALL);
+        addDrop(ModBlocks.BIRCH_PLANKED_WALL);
+        addDrop(ModBlocks.JUNGLE_PLANKED_WALL);
+        addDrop(ModBlocks.ACACIA_PLANKED_WALL);
+        addDrop(ModBlocks.DARK_OAK_PLANKED_WALL);
+        addDrop(ModBlocks.MANGROVE_PLANKED_WALL);
+        addDrop(ModBlocks.CHERRY_PLANKED_WALL);
+        addDrop(ModBlocks.BAMBOO_PLANKED_WALL);
+        addDrop(ModBlocks.CRIMSON_PLANKED_WALL);
+        addDrop(ModBlocks.WARPED_PLANKED_WALL);
+
         // COUNTERS
         addDrop(ModBlocks.OAK_COUNTER);
         addDrop(ModBlocks.SPRUCE_COUNTER);

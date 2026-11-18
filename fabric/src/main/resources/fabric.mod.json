@@ -22,7 +22,9 @@
 			"net.luckystudio.cozyhome.fabric.CozyHomeFabricClient"
 		]
 	},
-	"mixins": [],
+	"mixins": [
+		"cozyhome.mixins.json"
+	],
 	"depends": {
 		"fabricloader": ">=0.16.5",
 		"minecraft": "~1.21",

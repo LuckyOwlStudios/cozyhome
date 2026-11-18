@@ -9,6 +9,7 @@ import net.luckystudio.cozyhome.item.ModItems;
 import net.luckystudio.cozyhome.recipe.ModRecipes;
 import net.luckystudio.cozyhome.screen.ModScreenHandlers;
 import net.luckystudio.cozyhome.util.ModSoundEvents;
+import net.luckystudio.cozyhome.world.structure.ModStructureProcessors;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class CozyHome {
 		ModSoundEvents.registerSounds();
 		ModDataComponents.registerModDataComponents();
 		ModRecipes.registerRecipes();
+		ModStructureProcessors.registerStructureProcessors();
 	}
 
 	public static Identifier id(String path) {

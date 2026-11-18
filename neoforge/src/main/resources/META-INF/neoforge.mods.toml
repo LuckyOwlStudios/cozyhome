@@ -13,6 +13,9 @@ This mod adds furniture into the game!
 '''
 logoFile = "assets/cozyhome/icon.png"
 
+[[mixins]]
+config = "cozyhome.mixins.json"
+
 [[dependencies.cozyhome]]
 modId = "neoforge"
 type = "required"

@@ -1,13 +1,13 @@
 package net.luckystudio.cozyhome.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.luckystudio.cozyhome.block.ModBlocks;
 import net.luckystudio.cozyhome.block.util.ModProperties;
 import net.luckystudio.cozyhome.block.util.enums.DoubleLongPart;
 import net.luckystudio.cozyhome.block.util.enums.TripleTallBlock;
 import net.minecraft.block.Block;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.data.server.loottable.BlockLootTableGenerator;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.ItemEntry;
@@ -15,11 +15,30 @@ import net.minecraft.loot.function.CopyComponentsLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.registry.RegistryWrapper;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-public class ModLootTableProvider extends FabricBlockLootTableProvider {
-    public ModLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
-        super(dataOutput, registryLookup);
+/**
+ * Block loot tables. Registered through NeoForge's LootTableProvider in {@link CozyHomeDataGenerator}.
+ */
+public class ModLootTableProvider extends BlockLootTableGenerator {
+    // Blocks we actually wrote a loot table for. NeoForge checks every "known" block has one,
+    // so we only report these (some blocks, like the falling liquid, intentionally have none).
+    private final Set<Block> blocksWithLootTables = new LinkedHashSet<>();
+
+    public ModLootTableProvider(RegistryWrapper.WrapperLookup registryLookup) {
+        super(Set.of(), FeatureFlags.FEATURE_MANAGER.getFeatureSet(), registryLookup);
+    }
+
+    @Override
+    protected void addDrop(Block block, LootTable.Builder lootTable) {
+        blocksWithLootTables.add(block);
+        super.addDrop(block, lootTable);
+    }
+
+    @Override
+    protected Iterable<Block> getKnownBlocks() {
+        return blocksWithLootTables;
     }
 
     @Override

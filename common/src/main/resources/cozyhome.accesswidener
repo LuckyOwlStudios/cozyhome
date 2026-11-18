@@ -16,3 +16,10 @@ accessible method net/minecraft/sound/SoundEvent of (Lnet/minecraft/util/Identif
 
 # Used on NeoForge to register flammable blocks (Fabric uses FlammableBlockRegistry)
 accessible method net/minecraft/block/FireBlock registerFlammableBlock (Lnet/minecraft/block/Block;II)V
+
+# Used by the NeoForge data generators (ModModelProvider and datagen/util)
+accessible field net/minecraft/data/client/BlockStateModelGenerator blockStateCollector Ljava/util/function/Consumer;
+accessible field net/minecraft/data/client/BlockStateModelGenerator modelCollector Ljava/util/function/BiConsumer;
+accessible method net/minecraft/data/client/BlockStateModelGenerator registerParentedItemModel (Lnet/minecraft/block/Block;Lnet/minecraft/util/Identifier;)V
+accessible method net/minecraft/data/client/BlockStateModelGenerator registerBuiltinWithParticle (Lnet/minecraft/block/Block;Lnet/minecraft/util/Identifier;)V
+accessible method net/minecraft/data/client/TextureKey of (Ljava/lang/String;)Lnet/minecraft/data/client/TextureKey;

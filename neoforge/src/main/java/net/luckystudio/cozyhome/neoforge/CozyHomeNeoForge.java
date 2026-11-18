@@ -1,6 +1,7 @@
 package net.luckystudio.cozyhome.neoforge;
 
 import net.luckystudio.cozyhome.CozyHome;
+import net.luckystudio.cozyhome.datagen.CozyHomeDataGenerator;
 import net.luckystudio.cozyhome.util.ModFlammableBlocks;
 import net.luckystudio.cozyhome.util.ModFuels;
 import net.luckystudio.cozyhome.util.ModTrades;
@@ -12,6 +13,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 import net.neoforged.neoforge.event.village.WandererTradesEvent;
@@ -29,6 +31,7 @@ public class CozyHomeNeoForge {
     public CozyHomeNeoForge(IEventBus modBus) {
         modBus.addListener(RegisterEvent.class, CozyHomeNeoForge::onRegister);
         modBus.addListener(FMLCommonSetupEvent.class, CozyHomeNeoForge::onCommonSetup);
+        modBus.addListener(GatherDataEvent.class, CozyHomeDataGenerator::gatherData);
 
         NeoForge.EVENT_BUS.addListener(FurnaceFuelBurnTimeEvent.class, CozyHomeNeoForge::onFuelBurnTime);
         NeoForge.EVENT_BUS.addListener(VillagerTradesEvent.class, CozyHomeNeoForge::onVillagerTrades);

@@ -9,7 +9,7 @@ loom {
 sourceSets {
 	main {
 		resources {
-			// Output of the Fabric data generator (run it with `./gradlew :fabric:runDatagen`).
+			// Output of the data generators (run them with `./gradlew :neoforge:runData`).
 			// Both loaders ship these files.
 			srcDir 'src/main/generated'
 			exclude '.cache/**'

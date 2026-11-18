@@ -9,6 +9,18 @@ architectury {
 
 loom {
 	accessWidenerPath = project(':common').loom.accessWidenerPath
+
+	runs {
+		// NeoForge data generation. Writes into common/src/main/generated so both loaders get the output.
+		// Run with: ./gradlew :neoforge:runData
+		data {
+			data()
+			name 'Data Generation'
+			programArgs '--all', '--mod', rootProject.mod_id
+			programArgs '--output', project(':common').file('src/main/generated').absolutePath
+			programArgs '--existing', project(':common').file('src/main/resources').absolutePath
+		}
+	}
 }
 
 repositories {

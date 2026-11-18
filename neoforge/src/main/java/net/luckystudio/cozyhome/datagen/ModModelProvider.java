@@ -1,7 +1,6 @@
 package net.luckystudio.cozyhome.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import com.google.gson.JsonElement;
 import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.block.ModBlocks;
 import net.luckystudio.cozyhome.block.util.ModProperties;
@@ -10,7 +9,9 @@ import net.luckystudio.cozyhome.datagen.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.enums.BlockFace;
 import net.minecraft.block.enums.StairShape;
-import net.minecraft.client.render.item.ItemModels;
+import net.minecraft.data.DataOutput;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.DataWriter;
 import net.minecraft.data.client.*;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -19,13 +20,86 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.Direction;
 
-public class ModModelProvider extends FabricModelProvider {
-    public ModModelProvider(FabricDataOutput output) {
-        super(output);
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+/**
+ * Block states, block models and item models.
+ * <p>
+ * The models are built with vanilla's {@link BlockStateModelGenerator} (the same tools Mojang uses
+ * for vanilla blocks), and this class writes the result as a NeoForge data provider. Only Cozy Home
+ * blocks and items are written.
+ */
+public class ModModelProvider implements DataProvider {
+    private final DataOutput.PathResolver blockStatesPathResolver;
+    private final DataOutput.PathResolver modelsPathResolver;
+
+    public ModModelProvider(DataOutput output) {
+        this.blockStatesPathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "blockstates");
+        this.modelsPathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "models");
+    }
+
+    @Override
+    public String getName() {
+        return "Cozy Home Block States and Models";
+    }
+
+    @Override
+    public CompletableFuture<?> run(DataWriter writer) {
+        Map<Block, BlockStateSupplier> blockStates = new HashMap<>();
+        Consumer<BlockStateSupplier> blockStateCollector = blockStateSupplier -> {
+            Block block = blockStateSupplier.getBlock();
+            if (blockStates.put(block, blockStateSupplier) != null) {
+                throw new IllegalStateException("Duplicate blockstate definition for " + block);
+            }
+        };
+
+        Map<Identifier, Supplier<JsonElement>> models = new HashMap<>();
+        BiConsumer<Identifier, Supplier<JsonElement>> modelCollector = (id, model) -> {
+            if (models.put(id, model) != null) {
+                throw new IllegalStateException("Duplicate model definition for " + id);
+            }
+        };
+
+        Set<Item> itemsWithoutAutoModel = new HashSet<>();
+        generateBlockStateModels(new BlockStateModelGenerator(blockStateCollector, modelCollector, itemsWithoutAutoModel::add));
+        generateItemModels(new ItemModelGenerator(modelCollector));
+
+        // Like vanilla: every Cozy Home block item without its own model gets one parented to the block model.
+        for (Block block : Registries.BLOCK) {
+            if (!Registries.BLOCK.getId(block).getNamespace().equals(CozyHome.MOD_ID)) {
+                continue;
+            }
+            Item item = Item.BLOCK_ITEMS.get(block);
+            if (item == null || itemsWithoutAutoModel.contains(item)) {
+                continue;
+            }
+            Identifier itemModelId = ModelIds.getItemModelId(item);
+            if (!models.containsKey(itemModelId)) {
+                models.put(itemModelId, new SimpleModelSupplier(ModelIds.getBlockModelId(block)));
+            }
+        }
+
+        return CompletableFuture.allOf(
+                writeJsons(writer, blockStates, block -> blockStatesPathResolver.resolveJson(Registries.BLOCK.getId(block))),
+                writeJsons(writer, models, modelsPathResolver::resolveJson));
+    }
+
+    private static <T> CompletableFuture<?> writeJsons(DataWriter writer, Map<T, ? extends Supplier<JsonElement>> jsons, Function<T, Path> pathGetter) {
+        return CompletableFuture.allOf(jsons.entrySet().stream()
+                .map(entry -> DataProvider.writeToPath(writer, entry.getValue().get(), pathGetter.apply(entry.getKey())))
+                .toArray(CompletableFuture[]::new));
     }
 
     // Even though it states "blockstate", these will generate blockstates, models, and item models.
-    @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
         registerGenerals(blockStateModelGenerator);
         registerFallingLiquid(blockStateModelGenerator, ModBlocks.FALLING_LIQUID);
@@ -340,8 +414,7 @@ public class ModModelProvider extends FabricModelProvider {
         registerChimney(blockStateModelGenerator, ModBlocks.GOLD_CHIMNEY, CozyHome.id("block/break/gold_furniture"), ChimneyIntake.IRON);
     }
 
-    // I have no idea what this does, but it's required.
-    @Override
+    // Item models for plain items (not block items) go here.
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
 
     }

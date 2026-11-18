@@ -1,19 +1,24 @@
 package net.luckystudio.cozyhome.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.block.ModBlocks;
 import net.luckystudio.cozyhome.item.ModItems;
+import net.minecraft.block.Block;
+import net.minecraft.data.DataOutput;
+import net.minecraft.data.server.tag.ItemTagProvider;
+import net.minecraft.data.server.tag.TagProvider;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.CompletableFuture;
 
-public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
-
-
-    public ModItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
-        super(output, completableFuture);
+public class ModItemTagProvider extends ItemTagProvider {
+    public ModItemTagProvider(DataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture,
+                              CompletableFuture<TagProvider.TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
+        super(output, registriesFuture, blockTags, CozyHome.MOD_ID, existingFileHelper);
     }
 
     @Override

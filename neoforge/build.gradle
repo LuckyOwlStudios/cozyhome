@@ -12,6 +12,9 @@ def commonResourcesDir = project(':common').file('src/main/resources').absoluteP
 
 loom {
 	accessWidenerPath = project(':common').loom.accessWidenerPath
+	// Every Compat's NeoForge jar points at an access widener it doesn't ship, which breaks Loom's
+	// transitive access widener step. Cozyhome doesn't rely on other mods' access wideners.
+	enableTransitiveAccessWideners = false
 
 	runs {
 		// NeoForge data generation. Writes into common/src/main/generated so both loaders get the output.

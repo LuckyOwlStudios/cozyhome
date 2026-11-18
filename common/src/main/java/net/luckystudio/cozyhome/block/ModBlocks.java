@@ -15,6 +15,7 @@ import net.luckystudio.cozyhome.block.custom.seatable.chairs.ChairBlock;
 import net.luckystudio.cozyhome.block.custom.counters.CounterBlock;
 import net.luckystudio.cozyhome.block.custom.water_holding_blocks.sink.SinkCounterBlock;
 import net.luckystudio.cozyhome.block.custom.counters.StorageCounterBlock;
+import net.luckystudio.cozyhome.block.custom.PlankedWallBlock;
 import net.luckystudio.cozyhome.block.custom.clocks.grandfather_clock.GrandfatherClockBlock;
 import net.luckystudio.cozyhome.block.custom.clocks.wall_clock.WallClockBlock;
 import net.luckystudio.cozyhome.block.custom.telescope.TelescopeBlock;
@@ -176,6 +177,19 @@ public class ModBlocks {
                         .sounds(soundGroup)
                         .dynamicBounds());
     }
+
+    // Planked walls (place like logs and connect along their axis)
+    public static final Block OAK_PLANKED_WALL = registerBlock("oak_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.OAK_PLANKS)));
+    public static final Block SPRUCE_PLANKED_WALL = registerBlock("spruce_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS)));
+    public static final Block BIRCH_PLANKED_WALL = registerBlock("birch_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS)));
+    public static final Block JUNGLE_PLANKED_WALL = registerBlock("jungle_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS)));
+    public static final Block ACACIA_PLANKED_WALL = registerBlock("acacia_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS)));
+    public static final Block DARK_OAK_PLANKED_WALL = registerBlock("dark_oak_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS)));
+    public static final Block MANGROVE_PLANKED_WALL = registerBlock("mangrove_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS)));
+    public static final Block CHERRY_PLANKED_WALL = registerBlock("cherry_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS)));
+    public static final Block BAMBOO_PLANKED_WALL = registerBlock("bamboo_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.BAMBOO_PLANKS)));
+    public static final Block CRIMSON_PLANKED_WALL = registerBlock("crimson_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS)));
+    public static final Block WARPED_PLANKED_WALL = registerBlock("warped_planked_wall", new PlankedWallBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS)));
 
     // Counters
     public static final Block OAK_COUNTER = registerBlock("oak_counter", createCounterBlock(Blocks.OAK_PLANKS, false, true));

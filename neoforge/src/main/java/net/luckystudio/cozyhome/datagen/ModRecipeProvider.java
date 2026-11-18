@@ -42,6 +42,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 .offerTo(exporter, CozyHome.id(getItemPath(output) + "_stonecutting"));
     }
 
+    public static void offerPlankedWallRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible planks) {
+        ShapedRecipeJsonBuilder.create(
+                        RecipeCategory.BUILDING_BLOCKS,
+                        output, 3)
+                .pattern("#")
+                .pattern("#")
+                .pattern("#")
+                .input('#', planks)
+                .criterion(hasItem(planks), conditionsFromItem(planks))
+                .offerTo(exporter);
+    }
+
     public static void offerCounterRecipe(RecipeExporter exporter, ItemConvertible output, ItemConvertible input1, ItemConvertible input2) {
         ShapedRecipeJsonBuilder.create(
                         RecipeCategory.BUILDING_BLOCKS,
@@ -333,6 +345,19 @@ public class ModRecipeProvider extends RecipeProvider {
         ComplexRecipeJsonBuilder.create(FurnitureDyeRecipe::new).offerTo(exporter, CozyHome.id("furniture_dye"));
 
         // Counters
+        // Planked walls: three planks in a column make three walls
+        offerPlankedWallRecipe(exporter, ModBlocks.OAK_PLANKED_WALL, Blocks.OAK_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.SPRUCE_PLANKED_WALL, Blocks.SPRUCE_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.BIRCH_PLANKED_WALL, Blocks.BIRCH_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.JUNGLE_PLANKED_WALL, Blocks.JUNGLE_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.ACACIA_PLANKED_WALL, Blocks.ACACIA_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.DARK_OAK_PLANKED_WALL, Blocks.DARK_OAK_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.MANGROVE_PLANKED_WALL, Blocks.MANGROVE_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.CHERRY_PLANKED_WALL, Blocks.CHERRY_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.BAMBOO_PLANKED_WALL, Blocks.BAMBOO_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.CRIMSON_PLANKED_WALL, Blocks.CRIMSON_PLANKS);
+        offerPlankedWallRecipe(exporter, ModBlocks.WARPED_PLANKED_WALL, Blocks.WARPED_PLANKS);
+
         offerCounterRecipe(exporter, ModBlocks.OAK_COUNTER, Blocks.BRICKS, Blocks.OAK_PLANKS);
         offerCounterRecipe(exporter, ModBlocks.SPRUCE_COUNTER, Blocks.POLISHED_ANDESITE, Blocks.SPRUCE_PLANKS);
         offerCounterRecipe(exporter, ModBlocks.BIRCH_COUNTER, Blocks.POLISHED_GRANITE, Blocks.BIRCH_PLANKS);

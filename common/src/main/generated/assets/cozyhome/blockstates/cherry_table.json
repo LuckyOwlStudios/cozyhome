@@ -2,21 +2,6 @@
   "multipart": [
     {
       "apply": {
-        "model": "cozyhome:block/cherry_table"
-      },
-      "when": {
-        "east": "false",
-        "north": "false",
-        "north_east": "false",
-        "north_west": "false",
-        "south": "false",
-        "south_east": "false",
-        "south_west": "false",
-        "west": "false"
-      }
-    },
-    {
-      "apply": {
         "model": "cozyhome:block/cherry_table_middle_piece"
       },
       "when": {

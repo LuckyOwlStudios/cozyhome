@@ -11,6 +11,16 @@ public class ModFuels {
     }
 
     public static void registerFuels(FuelRegistrar fuels) {
+        fuels.add(ModBlocks.OAK_PLANKED_WALL, 300);
+        fuels.add(ModBlocks.SPRUCE_PLANKED_WALL, 300);
+        fuels.add(ModBlocks.BIRCH_PLANKED_WALL, 300);
+        fuels.add(ModBlocks.JUNGLE_PLANKED_WALL, 300);
+        fuels.add(ModBlocks.ACACIA_PLANKED_WALL, 300);
+        fuels.add(ModBlocks.DARK_OAK_PLANKED_WALL, 300);
+        fuels.add(ModBlocks.MANGROVE_PLANKED_WALL, 300);
+        fuels.add(ModBlocks.CHERRY_PLANKED_WALL, 300);
+        fuels.add(ModBlocks.BAMBOO_PLANKED_WALL, 300);
+
         fuels.add(ModBlocks.OAK_TABLE, 300);
         fuels.add(ModBlocks.SPRUCE_TABLE, 300);
         fuels.add(ModBlocks.BIRCH_TABLE, 300);

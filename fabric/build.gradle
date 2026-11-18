@@ -31,10 +31,11 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
 
-	// Every Compat: compile against it, and load it in dev runs only (never a dependency of the released jar).
+	// Every Compat and Universal Sawmill: load them in dev runs only (never dependencies of the released jar).
 	modCompileOnly("maven.modrinth:every-compat:$rootProject.everycomp_fabric_version") { transitive = false }
 	modLocalRuntime("maven.modrinth:every-compat:$rootProject.everycomp_fabric_version") { transitive = false }
 	modLocalRuntime("maven.modrinth:moonlight:$rootProject.moonlight_fabric_version") { transitive = false }
+	modLocalRuntime("maven.modrinth:universal-sawmill:$rootProject.sawmill_fabric_version") { transitive = false }
 	// No sample wood mod yet: recent wood mods (e.g. Nature's Spirit, Lithostitched) ship access wideners in
 	// a newer format than Loom 1.7 can remap. Updating Architectury Loom would allow adding one here.
 

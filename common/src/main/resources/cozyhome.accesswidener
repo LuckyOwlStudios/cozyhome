@@ -1,0 +1,18 @@
+accessWidener v2 named
+
+# Vanilla members that Fabric API used to widen for us. Common code can't see Fabric API,
+# so we widen them ourselves. On NeoForge this file is converted into an access transformer.
+
+# Block entity / screen handler factories (used by ModBlockEntityTypes and ModScreenHandlers)
+accessible class net/minecraft/block/entity/BlockEntityType$BlockEntityFactory
+accessible class net/minecraft/screen/ScreenHandlerType$Factory
+accessible method net/minecraft/screen/ScreenHandlerType <init> (Lnet/minecraft/screen/ScreenHandlerType$Factory;Lnet/minecraft/resource/featuretoggle/FeatureSet;)V
+
+# Used by ModBlocks for lamp light levels
+accessible method net/minecraft/block/Blocks createLightLevelFromLitBlockState (I)Ljava/util/function/ToIntFunction;
+
+# Used by ModSoundEvents
+accessible method net/minecraft/sound/SoundEvent of (Lnet/minecraft/util/Identifier;)Lnet/minecraft/sound/SoundEvent;
+
+# Used on NeoForge to register flammable blocks (Fabric uses FlammableBlockRegistry)
+accessible method net/minecraft/block/FireBlock registerFlammableBlock (Lnet/minecraft/block/Block;II)V

@@ -342,6 +342,7 @@ public class ModItemGroups {
 
                         // Misc. Blocks/Items
                         entries.add(ModBlocks.TELESCOPE);
+                        entries.add(ModBlocks.CARPENTRY_TABLE);
                         entries.add(ModItems.PAINT_BRUSH);
                         entries.add(ModItems.CUSHION);
                         entries.add(ModItems.HAY_CUSHION);

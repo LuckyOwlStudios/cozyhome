@@ -356,6 +356,7 @@ public class ModLootTableProvider extends BlockLootTableGenerator {
         addDrop(ModBlocks.PURPUR_FOUNTAIN_SPOUT);
 
         addDrop(ModBlocks.TELESCOPE);
+        addDrop(ModBlocks.CARPENTRY_TABLE);
     }
 
     // This will drop only the bottom part of triple tall blocks that are one block together

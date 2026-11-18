@@ -273,6 +273,8 @@
   "block.cozyhome.purpur_fountain_sprout": "Chorro de Fuente de Púrpura",
   "block.cozyhome.dye_vat": "Tina de Tinte",
   "block.cozyhome.telescope": "Telescopio",
+  "block.cozyhome.carpentry_table": "Mesa de carpintería",
+  "entity.minecraft.villager.carpenter": "Carpintero",
   "blocks.cozyhome.chairs": "Sillas",
   "blocks.cozyhome.sofas": "Sofás",
   "blocks.cozyhome.couches": "Divanes",

@@ -5,6 +5,8 @@ import net.luckystudio.cozyhome.datagen.CozyHomeDataGenerator;
 import net.luckystudio.cozyhome.util.ModFlammableBlocks;
 import net.luckystudio.cozyhome.util.ModFuels;
 import net.luckystudio.cozyhome.util.ModTrades;
+import net.luckystudio.cozyhome.villager.CarpenterTrades;
+import net.luckystudio.cozyhome.villager.ModVillagers;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.item.Item;
@@ -74,6 +76,14 @@ public class CozyHomeNeoForge {
             if (trades != null) {
                 trades.add(ModTrades.TELESCOPE);
             }
+        }
+        if (event.getType() == ModVillagers.CARPENTER) {
+            CarpenterTrades.TRADES.forEach((level, factories) -> {
+                List<TradeOffers.Factory> trades = event.getTrades().get(level.intValue());
+                if (trades != null) {
+                    trades.addAll(factories);
+                }
+            });
         }
     }
 

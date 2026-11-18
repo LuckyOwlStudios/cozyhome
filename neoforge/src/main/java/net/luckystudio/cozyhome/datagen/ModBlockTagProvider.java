@@ -220,6 +220,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.BAMBOO_LARGE_STUMP)
                 .add(ModBlocks.CRIMSON_LARGE_STUMP)
                 .add(ModBlocks.WARPED_LARGE_STUMP)
+                // VILLAGER JOB SITES
+                .add(ModBlocks.CARPENTRY_TABLE)
         ;
 
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)

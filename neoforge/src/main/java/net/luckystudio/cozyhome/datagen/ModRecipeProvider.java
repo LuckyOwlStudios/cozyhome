@@ -16,6 +16,7 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.ItemTags;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -335,6 +336,20 @@ public class ModRecipeProvider extends RecipeProvider {
                 .input('#', Items.SPYGLASS)
                 .input('@', Items.COPPER_INGOT)
                 .criterion(hasItem(Items.SPYGLASS), conditionsFromItem(Items.SPYGLASS))
+                .offerTo(exporter);
+    }
+
+    // Carpenter job site: planks with two iron nuggets (nails) on top, shaped like the fletching table
+    public static void offerCarpentryTableRecipe(RecipeExporter exporter) {
+        ShapedRecipeJsonBuilder.create(
+                        RecipeCategory.BUILDING_BLOCKS,
+                        ModBlocks.CARPENTRY_TABLE, 1)
+                .pattern("@@")
+                .pattern("##")
+                .pattern("##")
+                .input('@', Items.IRON_NUGGET)
+                .input('#', ItemTags.PLANKS)
+                .criterion(hasItem(Items.IRON_NUGGET), conditionsFromItem(Items.IRON_NUGGET))
                 .offerTo(exporter);
     }
 
@@ -687,5 +702,6 @@ public class ModRecipeProvider extends RecipeProvider {
         offerCushionRecipe(exporter, ModItems.HAY_CUSHION, Blocks.HAY_BLOCK, Items.STRING);
 
         offerTelescopeRecipe(exporter);
+        offerCarpentryTableRecipe(exporter);
     }
 }

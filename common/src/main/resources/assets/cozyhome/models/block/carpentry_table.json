@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "cozyhome:block/carpentry_table/carpentry_table_front",
+    "north": "cozyhome:block/carpentry_table/carpentry_table_front",
+    "south": "cozyhome:block/carpentry_table/carpentry_table_front",
+    "east": "cozyhome:block/carpentry_table/carpentry_table_side",
+    "west": "cozyhome:block/carpentry_table/carpentry_table_side",
+    "up": "cozyhome:block/carpentry_table/carpentry_table_top",
+    "down": "minecraft:block/spruce_planks"
+  }
+}

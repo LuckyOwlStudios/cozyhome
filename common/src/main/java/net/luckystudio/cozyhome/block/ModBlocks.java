@@ -518,6 +518,8 @@ public class ModBlocks {
     public static final Block IRON_CHIMNEY = registerBlock("iron_chimney", createChimney(1.5f,6, BlockSoundGroup.METAL));
     public static final Block GOLD_CHIMNEY = registerBlock("gold_chimney", createChimney(1.5f,6, BlockSoundGroup.METAL));
 
+    // Job site block for the Carpenter villager (see net.luckystudio.cozyhome.villager.ModVillagers)
+    public static final Block CARPENTRY_TABLE = registerBlock("carpentry_table", new Block(AbstractBlock.Settings.copy(Blocks.FLETCHING_TABLE)));
     public static final Block TELESCOPE = registerBlock("telescope", new TelescopeBlock(AbstractBlock.Settings.create()
             .breakInstantly()
             .mapColor(DyeColor.ORANGE)

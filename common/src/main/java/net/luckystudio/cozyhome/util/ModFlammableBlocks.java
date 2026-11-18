@@ -12,6 +12,17 @@ public class ModFlammableBlocks {
 
     public static void registerFlammables(FlammableRegistrar flammableBlockRegistry) {
 
+        // PLANKED WALLS
+        flammableBlockRegistry.add(ModBlocks.OAK_PLANKED_WALL, 5, 20);
+        flammableBlockRegistry.add(ModBlocks.SPRUCE_PLANKED_WALL, 5, 20);
+        flammableBlockRegistry.add(ModBlocks.BIRCH_PLANKED_WALL, 5, 20);
+        flammableBlockRegistry.add(ModBlocks.JUNGLE_PLANKED_WALL, 5, 20);
+        flammableBlockRegistry.add(ModBlocks.ACACIA_PLANKED_WALL, 5, 20);
+        flammableBlockRegistry.add(ModBlocks.DARK_OAK_PLANKED_WALL, 5, 20);
+        flammableBlockRegistry.add(ModBlocks.MANGROVE_PLANKED_WALL, 5, 20);
+        flammableBlockRegistry.add(ModBlocks.CHERRY_PLANKED_WALL, 5, 20);
+        flammableBlockRegistry.add(ModBlocks.BAMBOO_PLANKED_WALL, 5, 20);
+
         // COUNTERS
         flammableBlockRegistry.add(ModBlocks.OAK_COUNTER, 5, 20);
         flammableBlockRegistry.add(ModBlocks.SPRUCE_COUNTER, 5, 20);

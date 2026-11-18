@@ -1,0 +1,25 @@
+{
+  "type": "sawmill:woodcutting",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "sawmill"
+      ]
+    }
+  ],
+  "ingredient": {
+    "item": "minecraft:crimson_planks"
+  },
+  "ingredient_count": 6,
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "sawmill"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "cozyhome:crimson_storage_counter"
+  }
+}

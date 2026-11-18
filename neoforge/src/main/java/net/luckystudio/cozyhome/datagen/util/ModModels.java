@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public class ModModels {
     public static final Model COUNTER = modBlockWithType("counter", ModBlockTypes.COUNTER, TextureKey.TOP, TextureKey.SIDE, TextureKey.BOTTOM, TextureKey.FRONT, TextureKey.BACK, TextureKey.PARTICLE);
+    public static final Model COUNTER_INVENTORY = modBlockWithTypeAndVariant("counter", ModBlockTypes.COUNTER, "_inventory", TextureKey.TOP, TextureKey.SIDE, TextureKey.BOTTOM, TextureKey.FRONT, TextureKey.BACK, TextureKey.PARTICLE);
     public static final Model COUNTER_INNER = modBlockWithTypeAndVariant("counter_inner", ModBlockTypes.COUNTER, "_inner", TextureKey.TOP, TextureKey.SIDE, TextureKey.BOTTOM, TextureKey.FRONT, TextureKey.BACK, TextureKey.PARTICLE);
     public static final Model COUNTER_OUTER = modBlockWithTypeAndVariant("counter_outer", ModBlockTypes.COUNTER, "_outer", TextureKey.TOP, TextureKey.SIDE, TextureKey.BOTTOM, TextureKey.FRONT, TextureKey.PARTICLE);
 
@@ -28,6 +29,13 @@ public class ModModels {
     public static final Model TABLE_INNER_CORNER_PIECE = modBlockWithTypeAndVariant("template_table_inner_corner_piece", ModBlockTypes.TABLE, "_inner_corner_piece", TextureKey.ALL, TextureKey.PARTICLE);
     public static final Model TABLE_MIDDLE = modBlockWithTypeAndVariant("template_table_middle", ModBlockTypes.TABLE, "_middle", TextureKey.ALL, TextureKey.PARTICLE);
     public static final Model TABLE_SIDE = modBlockWithTypeAndVariant("template_table_side", ModBlockTypes.TABLE, "_side", TextureKey.ALL, TextureKey.PARTICLE);
+    // Classic tables: separate top / sides (apron) / legs textures
+    public static final Model CLASSIC_TABLE = modBlockWithType("classic_table", ModBlockTypes.TABLE, TextureKey.TOP, ModTextureKey.SIDES, ModTextureKey.LEGS, TextureKey.PARTICLE);
+    public static final Model CLASSIC_TABLE_MIDDLE_PIECE = modBlockWithTypeAndVariant("classic_table_middle_piece", ModBlockTypes.TABLE, "_middle_piece", TextureKey.TOP, TextureKey.PARTICLE);
+    public static final Model CLASSIC_TABLE_INNER_CORNER = modBlockWithTypeAndVariant("classic_table_inner_corner", ModBlockTypes.TABLE, "_inner_corner", TextureKey.TOP, ModTextureKey.SIDES, ModTextureKey.LEGS, TextureKey.PARTICLE);
+    public static final Model CLASSIC_TABLE_OUTER_CORNER = modBlockWithTypeAndVariant("classic_table_outer_corner", ModBlockTypes.TABLE, "_outer_corner", TextureKey.TOP, ModTextureKey.SIDES, ModTextureKey.LEGS, TextureKey.PARTICLE);
+    public static final Model CLASSIC_TABLE_LEFT_SIDE = modBlockWithTypeAndVariant("classic_table_left_side", ModBlockTypes.TABLE, "_left_side", TextureKey.TOP, ModTextureKey.SIDES, TextureKey.PARTICLE);
+    public static final Model CLASSIC_TABLE_RIGHT_SIDE = modBlockWithTypeAndVariant("classic_table_right_side", ModBlockTypes.TABLE, "_right_side", TextureKey.TOP, ModTextureKey.SIDES, TextureKey.PARTICLE);
     public static final Model SHELF_TABLE = modBlockWithType("template_shelf_table", ModBlockTypes.TABLE, TextureKey.ALL, TextureKey.PARTICLE);
     public static final Model SHELF_TABLE_CORNER = modBlockWithTypeAndVariant("template_shelf_table_corner", ModBlockTypes.TABLE, "_corner", TextureKey.ALL, TextureKey.PARTICLE);
     public static final Model SHELF_TABLE_CORNER_PIECE = modBlockWithTypeAndVariant("template_shelf_table_corner_piece", ModBlockTypes.TABLE, "_corner_piece", TextureKey.ALL, TextureKey.PARTICLE);

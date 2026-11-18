@@ -4,6 +4,9 @@ import com.mojang.serialization.MapCodec;
 import net.luckystudio.cozyhome.util.ModScreenTexts;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import net.luckystudio.cozyhome.block.util.ModBlockEntityTypes;
 import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -114,6 +117,13 @@ public class StorageCounterBlock extends BlockWithEntity implements BlockEntityP
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new StorageCounterBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        // Only the client animates the doors; the server keeps track of viewers via scheduled ticks.
+        return world.isClient ? validateTicker(type, ModBlockEntityTypes.STORAGE_COUNTER_BLOCK_ENTITY, StorageCounterBlockEntity::clientTick) : null;
     }
 
     @Override

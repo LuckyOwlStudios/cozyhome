@@ -1,0 +1,8 @@
+{
+  "parent": "cozyhome:block/table/classic_table_left_side",
+  "textures": {
+    "particle": "minecraft:block/crimson_planks",
+    "sides": "cozyhome:block/table/crimson_table_sides",
+    "top": "cozyhome:block/table/crimson_table_top"
+  }
+}

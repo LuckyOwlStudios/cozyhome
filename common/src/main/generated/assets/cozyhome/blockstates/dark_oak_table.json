@@ -7,250 +7,219 @@
       "when": {
         "east": "false",
         "north": "false",
+        "north_east": "false",
+        "north_west": "false",
         "south": "false",
+        "south_east": "false",
+        "south_west": "false",
         "west": "false"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_double"
+        "model": "cozyhome:block/dark_oak_table_middle_piece"
       },
       "when": {
-        "east": "false",
-        "north": "false",
-        "south": "true",
-        "west": "false"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_double",
-        "y": 90
-      },
-      "when": {
-        "east": "false",
-        "north": "false",
-        "south": "false",
-        "west": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_double",
-        "y": 180
-      },
-      "when": {
-        "east": "false",
         "north": "true",
-        "south": "false",
-        "west": "false"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_double",
-        "y": 270
-      },
-      "when": {
-        "east": "true",
-        "north": "false",
-        "south": "false",
-        "west": "false"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_middle"
-      },
-      "when": {
-        "east": "true",
-        "north": "false",
-        "south": "false",
-        "west": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_middle",
-        "y": 90
-      },
-      "when": {
-        "east": "false",
-        "north": "true",
-        "south": "true",
-        "west": "false"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_inner_corner_piece"
-      },
-      "when": {
-        "south_east": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_inner_corner_piece",
-        "y": 90
-      },
-      "when": {
-        "south_west": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_inner_corner_piece",
-        "y": 180
-      },
-      "when": {
+        "west": "true",
         "north_west": "true"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_inner_corner_piece",
-        "y": 270
+        "model": "cozyhome:block/dark_oak_table_middle_piece",
+        "y": 90
       },
       "when": {
+        "north": "true",
+        "east": "true",
         "north_east": "true"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_corner_piece"
-      },
-      "when": {
-        "east": "true",
-        "south": "true",
-        "south_east": "false"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_corner_piece",
-        "y": 90
-      },
-      "when": {
-        "south": "true",
-        "south_west": "false",
-        "west": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_corner_piece",
+        "model": "cozyhome:block/dark_oak_table_middle_piece",
         "y": 180
       },
       "when": {
-        "north": "true",
-        "north_west": "false",
-        "west": "true"
+        "south": "true",
+        "east": "true",
+        "south_east": "true"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_corner_piece",
+        "model": "cozyhome:block/dark_oak_table_middle_piece",
         "y": 270
       },
       "when": {
-        "east": "true",
+        "south": "true",
+        "west": "true",
+        "south_west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_inner_corner"
+      },
+      "when": {
         "north": "true",
+        "west": "true",
+        "north_west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_inner_corner",
+        "y": 90
+      },
+      "when": {
+        "north": "true",
+        "east": "true",
         "north_east": "false"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_corner"
+        "model": "cozyhome:block/dark_oak_table_inner_corner",
+        "y": 180
       },
       "when": {
-        "east": "true",
-        "north": "false",
         "south": "true",
+        "east": "true",
+        "south_east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_inner_corner",
+        "y": 270
+      },
+      "when": {
+        "south": "true",
+        "west": "true",
+        "south_west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_outer_corner"
+      },
+      "when": {
+        "north": "false",
+        "west": "false",
+        "north_west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_outer_corner",
+        "y": 90
+      },
+      "when": {
+        "north": "false",
+        "east": "false",
+        "north_east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_outer_corner",
+        "y": 180
+      },
+      "when": {
+        "south": "false",
+        "east": "false",
+        "south_east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_outer_corner",
+        "y": 270
+      },
+      "when": {
+        "south": "false",
+        "west": "false",
+        "south_west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_left_side"
+      },
+      "when": {
+        "south": "true",
+        "east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_left_side",
+        "y": 90
+      },
+      "when": {
+        "west": "true",
+        "south": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_left_side",
+        "y": 180
+      },
+      "when": {
+        "north": "true",
         "west": "false"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_corner",
-        "y": 90
-      },
-      "when": {
-        "east": "false",
-        "north": "false",
-        "south": "true",
-        "west": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_corner",
-        "y": 180
-      },
-      "when": {
-        "east": "false",
-        "north": "true",
-        "south": "false",
-        "west": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_corner",
+        "model": "cozyhome:block/dark_oak_table_left_side",
         "y": 270
       },
       "when": {
         "east": "true",
-        "north": "true",
-        "south": "false",
+        "north": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "cozyhome:block/dark_oak_table_right_side"
+      },
+      "when": {
+        "south": "true",
         "west": "false"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_side"
-      },
-      "when": {
-        "east": "true",
-        "north": "false",
-        "south": "true",
-        "west": "true"
-      }
-    },
-    {
-      "apply": {
-        "model": "cozyhome:block/dark_oak_table_side",
+        "model": "cozyhome:block/dark_oak_table_right_side",
         "y": 90
       },
       "when": {
-        "east": "false",
-        "north": "true",
-        "south": "true",
-        "west": "true"
+        "west": "true",
+        "north": "false"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_side",
+        "model": "cozyhome:block/dark_oak_table_right_side",
         "y": 180
       },
       "when": {
-        "east": "true",
         "north": "true",
-        "south": "false",
-        "west": "true"
+        "east": "false"
       }
     },
     {
       "apply": {
-        "model": "cozyhome:block/dark_oak_table_side",
+        "model": "cozyhome:block/dark_oak_table_right_side",
         "y": 270
       },
       "when": {
         "east": "true",
-        "north": "true",
-        "south": "true",
-        "west": "false"
+        "south": "false"
       }
     }
   ]

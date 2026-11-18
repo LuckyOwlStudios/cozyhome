@@ -1,0 +1,7 @@
+{
+  "parent": "cozyhome:block/table/classic_table_middle_piece",
+  "textures": {
+    "particle": "minecraft:block/bamboo_planks",
+    "top": "cozyhome:block/table/bamboo_table_top"
+  }
+}

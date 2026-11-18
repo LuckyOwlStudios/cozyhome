@@ -19,6 +19,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -53,6 +54,11 @@ public class StorageCounterBlockEntity extends LootableContainerBlockEntity impl
             }
         }
     };
+
+    // Client-side door animation, 0 = closed, 1 = open
+    private static final float DOOR_SPEED = 0.2F;
+    private float openProgress;
+    private float lastOpenProgress;
 
     public StorageCounterBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntityTypes.STORAGE_COUNTER_BLOCK_ENTITY, pos, state);
@@ -137,5 +143,21 @@ public class StorageCounterBlockEntity extends LootableContainerBlockEntity impl
         double f = (double)this.pos.getZ() + 0.5 + (double)vec3i.getZ() / 2.0;
         assert this.world != null;
         this.world.playSound(null, d, e, f, soundEvent, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+    }
+
+    public static void clientTick(World world, BlockPos pos, BlockState state, StorageCounterBlockEntity blockEntity) {
+        blockEntity.lastOpenProgress = blockEntity.openProgress;
+        boolean open = state.contains(StorageCounterBlock.OPEN) && state.get(StorageCounterBlock.OPEN);
+        if (open) {
+            blockEntity.openProgress = Math.min(1.0F, blockEntity.openProgress + DOOR_SPEED);
+        } else {
+            blockEntity.openProgress = Math.max(0.0F, blockEntity.openProgress - DOOR_SPEED);
+        }
+    }
+
+    /** Smoothed door progress for rendering, eased so the doors slow down at the ends. */
+    public float getOpenProgress(float tickDelta) {
+        float progress = MathHelper.lerp(tickDelta, this.lastOpenProgress, this.openProgress);
+        return progress * progress * (3.0F - 2.0F * progress);
     }
 }

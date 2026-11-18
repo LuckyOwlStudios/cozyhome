@@ -1,33 +1,18 @@
 {
   "variants": {
-    "facing=east,open=false": {
+    "facing=east": {
       "model": "cozyhome:block/birch_storage_counter",
       "y": 270
     },
-    "facing=east,open=true": {
-      "model": "cozyhome:block/birch_storage_counter_open",
-      "y": 270
-    },
-    "facing=north,open=false": {
+    "facing=north": {
       "model": "cozyhome:block/birch_storage_counter",
       "y": 180
     },
-    "facing=north,open=true": {
-      "model": "cozyhome:block/birch_storage_counter_open",
-      "y": 180
-    },
-    "facing=south,open=false": {
+    "facing=south": {
       "model": "cozyhome:block/birch_storage_counter"
     },
-    "facing=south,open=true": {
-      "model": "cozyhome:block/birch_storage_counter_open"
-    },
-    "facing=west,open=false": {
+    "facing=west": {
       "model": "cozyhome:block/birch_storage_counter",
-      "y": 90
-    },
-    "facing=west,open=true": {
-      "model": "cozyhome:block/birch_storage_counter_open",
       "y": 90
     }
   }

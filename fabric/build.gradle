@@ -31,6 +31,15 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
 
+	// Every Compat: compile against it, and load it in dev runs only (never a dependency of the released jar).
+	modCompileOnly("maven.modrinth:every-compat:$rootProject.everycomp_fabric_version") { transitive = false }
+	modLocalRuntime("maven.modrinth:every-compat:$rootProject.everycomp_fabric_version") { transitive = false }
+	modLocalRuntime("maven.modrinth:moonlight:$rootProject.moonlight_fabric_version") { transitive = false }
+	if (rootProject.dev_wood_mods.toBoolean()) {
+		modLocalRuntime("maven.modrinth:natures-spirit:$rootProject.natures_spirit_fabric_version") { transitive = false }
+		modLocalRuntime("maven.modrinth:XaDC71GB:$rootProject.lithostitched_fabric_version") { transitive = false }
+	}
+
 	common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
 	shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }

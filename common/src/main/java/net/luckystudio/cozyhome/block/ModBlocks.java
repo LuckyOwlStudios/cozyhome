@@ -41,7 +41,7 @@ import static net.minecraft.block.Blocks.createLightLevelFromLitBlockState;
 
 public class ModBlocks {
 
-    private static Block createCounterBlock(Block block, Boolean requiresTool, Boolean burnable) {
+    public static Block createCounterBlock(Block block, Boolean requiresTool, Boolean burnable) {
         AbstractBlock.Settings settings = AbstractBlock.Settings.copy(block);
         if (requiresTool) settings.requiresTool();
         if (burnable) settings.burnable();
@@ -55,7 +55,7 @@ public class ModBlocks {
         return new StorageCounterBlock(settings);
     }
 
-    private static Block createSinkCounterBlock(Block block) {
+    public static Block createSinkCounterBlock(Block block) {
         return new SinkCounterBlock(AbstractBlock.Settings.copy(block)
                 .luminance(ModBlockUtilities.createLightLevelFromContainsBlockState(15)));
     }
@@ -68,7 +68,7 @@ public class ModBlocks {
         return new ChairBlock(chairType, settings);
     }
 
-    private static Block createTable(Block block) {
+    public static Block createTable(Block block) {
         return new ClassicTableBlock(AbstractBlock.Settings.copy(block).dynamicBounds());
     }
 
@@ -105,15 +105,15 @@ public class ModBlocks {
         return new SofaBlock(sofaType, AbstractBlock.Settings.copy(block).dynamicBounds());
     }
 
-    private static Block createCouch(Block block) {
+    public static Block createCouch(Block block) {
         return new CouchBlock(AbstractBlock.Settings.copy(block).dynamicBounds());
     }
 
-    private static Block createDesk(Block block) {
+    public static Block createDesk(Block block) {
         return new DeskBlock(AbstractBlock.Settings.copy(block));
     }
 
-    private static Block createDrawer(Block block) {
+    public static Block createDrawer(Block block) {
         return new DrawerBlock(block.getDefaultState(), AbstractBlock.Settings.copy(block));
     }
 
@@ -166,7 +166,7 @@ public class ModBlocks {
                         .dynamicBounds());
     }
 
-    private static Block createLargeStump(BlockSoundGroup soundGroup) {
+    public static Block createLargeStump(BlockSoundGroup soundGroup) {
         return new LargeStumpBlock(
                 AbstractBlock.Settings.create()
                         .solid()

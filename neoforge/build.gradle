@@ -52,6 +52,16 @@ configurations {
 dependencies {
 	neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
 
+	// Every Compat: compile against it, and load it in dev runs only (never a dependency of the released jar).
+	modCompileOnly("maven.modrinth:every-compat:$rootProject.everycomp_neoforge_version") { transitive = false }
+	modCompileOnly("maven.modrinth:moonlight:$rootProject.moonlight_neoforge_version") { transitive = false }
+	modLocalRuntime("maven.modrinth:every-compat:$rootProject.everycomp_neoforge_version") { transitive = false }
+	modLocalRuntime("maven.modrinth:moonlight:$rootProject.moonlight_neoforge_version") { transitive = false }
+	if (rootProject.dev_wood_mods.toBoolean()) {
+		modLocalRuntime("maven.modrinth:natures-spirit:$rootProject.natures_spirit_neoforge_version") { transitive = false }
+		modLocalRuntime("maven.modrinth:XaDC71GB:$rootProject.lithostitched_neoforge_version") { transitive = false }
+	}
+
 	common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
 	shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

@@ -26,6 +26,17 @@ subprojects {
 		// Add repositories to retrieve artifacts from in here.
 		// You should only use this when depending on other mods because
 		// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+		exclusiveContent {
+			forRepository {
+				maven {
+					name = 'Modrinth'
+					url = 'https://api.modrinth.com/maven'
+				}
+			}
+			filter {
+				includeGroup 'maven.modrinth'
+			}
+		}
 	}
 
 	dependencies {

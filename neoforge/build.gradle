@@ -52,9 +52,8 @@ configurations {
 dependencies {
 	neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
 
-	// Universal Sawmill: load it in dev runs only (never a dependency of the released jar).
-	modLocalRuntime("maven.modrinth:moonlight:$rootProject.moonlight_neoforge_version") { transitive = false }
-	modLocalRuntime("maven.modrinth:universal-sawmill:$rootProject.sawmill_neoforge_version") { transitive = false }
+	// Universal Sawmill is loaded in Fabric dev runs only. Its NeoForge jar (built by a newer Architectury Loom)
+	// names a sawmill.accesswidener it doesn't ship, and Loom 1.7 fails to remap it ("Failed to remap 2 mods").
 
 	common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
 	shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')

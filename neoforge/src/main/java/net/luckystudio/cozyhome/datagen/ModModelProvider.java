@@ -3,6 +3,7 @@ package net.luckystudio.cozyhome.datagen;
 import com.google.gson.JsonElement;
 import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.block.ModBlocks;
+import net.luckystudio.cozyhome.block.custom.PlankedWallBlock;
 import net.luckystudio.cozyhome.block.util.ModProperties;
 import net.luckystudio.cozyhome.block.util.enums.*;
 import net.luckystudio.cozyhome.datagen.util.*;
@@ -104,6 +105,18 @@ public class ModModelProvider implements DataProvider {
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
         registerGenerals(blockStateModelGenerator);
         registerFallingLiquid(blockStateModelGenerator, ModBlocks.FALLING_LIQUID);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.OAK_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.SPRUCE_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.BIRCH_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.JUNGLE_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.ACACIA_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.DARK_OAK_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.MANGROVE_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.CHERRY_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.BAMBOO_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.CRIMSON_PLANKED_WALL);
+        registerPlankedWall(blockStateModelGenerator, ModBlocks.WARPED_PLANKED_WALL);
+
         registerCounter(blockStateModelGenerator, ModBlocks.OAK_COUNTER, CozyHome.id("block/break/oak_furniture"));
         registerCounter(blockStateModelGenerator, ModBlocks.SPRUCE_COUNTER, CozyHome.id("block/break/spruce_furniture"));
         registerCounter(blockStateModelGenerator, ModBlocks.BIRCH_COUNTER, CozyHome.id("block/break/birch_furniture"));
@@ -766,6 +779,34 @@ public class ModModelProvider implements DataProvider {
 
     // The classic table look: one top piece per quarter, side aprons and legs that
     // appear only on outer corners. Same multipart layout as the original NeoForge rewrite.
+    // Planked walls are column blocks (like logs) with a side texture for each part of a run
+    public final void registerPlankedWall(BlockStateModelGenerator blockStateModelGenerator, Block block) {
+        Identifier blockId = Registries.BLOCK.getId(block);
+        String base = "block/planked_wall/" + blockId.getPath();
+        Identifier end = Identifier.of(blockId.getNamespace(), base + "_end");
+        Identifier single = Models.CUBE_COLUMN.upload(block, TextureMap.sideEnd(Identifier.of(blockId.getNamespace(), base), end), blockStateModelGenerator.modelCollector);
+        Identifier head = Models.CUBE_COLUMN.upload(ModelIds.getBlockSubModelId(block, "_top"), TextureMap.sideEnd(Identifier.of(blockId.getNamespace(), base + "_top"), end), blockStateModelGenerator.modelCollector);
+        Identifier middle = Models.CUBE_COLUMN.upload(ModelIds.getBlockSubModelId(block, "_middle"), TextureMap.sideEnd(Identifier.of(blockId.getNamespace(), base + "_middle"), end), blockStateModelGenerator.modelCollector);
+        Identifier tail = Models.CUBE_COLUMN.upload(ModelIds.getBlockSubModelId(block, "_bottom"), TextureMap.sideEnd(Identifier.of(blockId.getNamespace(), base + "_bottom"), end), blockStateModelGenerator.modelCollector);
+
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
+                .coordinate(BlockStateVariantMap.create(Properties.AXIS, PlankedWallBlock.CONNECTION).register((axis, connection) -> {
+                    Identifier model = switch (connection) {
+                        case HEAD -> head;
+                        case MIDDLE -> middle;
+                        case TAIL -> tail;
+                        default -> single;
+                    };
+                    BlockStateVariant variant = BlockStateVariant.create().put(VariantSettings.MODEL, model);
+                    // Same rotations as logs: the model's top points north for Z and east for X
+                    return switch (axis) {
+                        case X -> variant.put(VariantSettings.X, VariantSettings.Rotation.R90).put(VariantSettings.Y, VariantSettings.Rotation.R90);
+                        case Z -> variant.put(VariantSettings.X, VariantSettings.Rotation.R90);
+                        default -> variant;
+                    };
+                })));
+    }
+
     public final void registerClassicTable(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier breakParticle) {
         Identifier blockId = Registries.BLOCK.getId(block);
         String base = "block/table/" + blockId.getPath();

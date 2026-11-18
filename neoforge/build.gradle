@@ -7,6 +7,9 @@ architectury {
 	neoForge()
 }
 
+def commonGeneratedDir = project(':common').file('src/main/generated').absolutePath
+def commonResourcesDir = project(':common').file('src/main/resources').absolutePath
+
 loom {
 	accessWidenerPath = project(':common').loom.accessWidenerPath
 
@@ -16,9 +19,9 @@ loom {
 		data {
 			data()
 			name 'Data Generation'
-			programArgs '--all', '--mod', rootProject.mod_id
-			programArgs '--output', project(':common').file('src/main/generated').absolutePath
-			programArgs '--existing', project(':common').file('src/main/resources').absolutePath
+			programArgs '--all', '--mod', 'cozyhome'
+			programArgs '--output', commonGeneratedDir
+			programArgs '--existing', commonResourcesDir
 		}
 	}
 }

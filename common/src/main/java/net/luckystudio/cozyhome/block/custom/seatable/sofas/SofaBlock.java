@@ -94,21 +94,9 @@ public class SofaBlock extends AbstractSeatBlock {
     protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         // Check if the block at the given position has an ItemRackBlockEntity associated with it.
         if (world.getBlockEntity(pos) instanceof SofaBlockEntity sofaBlockEntity) {
-            if (stack.getItem() instanceof DyeItem dyeItem) {
-                final int itemColor = dyeItem.getColor().getEntityColor();
-                final int blockColor = ModColorHandler.getBlockColor(sofaBlockEntity, -17170434);
-                final int newColor = ColorHelper.Argb.averageArgb(blockColor, itemColor);
-                if (blockColor == newColor) {
-                    player.sendMessage(Text.translatable("message.cozyhome.same_color"), true);
-                    return ItemActionResult.SUCCESS;
-                }
-                ComponentMap components = ComponentMap.builder().add(DataComponentTypes.DYED_COLOR, new DyedColorComponent(newColor, false)).build();
-                sofaBlockEntity.setComponents(components);
-
-                stack.decrementUnlessCreative(1, player);
-                sofaBlockEntity.markDirty();
-                world.updateListeners(pos, state, state, 0);
-                return ItemActionResult.SUCCESS;
+            ItemActionResult dyeResult = ModColorHandler.tryDyeBlock(stack, state, world, pos, player, sofaBlockEntity);
+            if (dyeResult != null) {
+                return dyeResult;
             }
             ItemStack storedItem = sofaBlockEntity.getStack();
             // Check if the item in hand is a valid tool or weapon.
@@ -259,11 +247,6 @@ public class SofaBlock extends AbstractSeatBlock {
         return ModProperties.setSeatRotationFromRotation(state);
     }
 
-    @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        tooltip.add(Text.translatable("tooltip.cozyhome.dyeable").formatted(Formatting.GRAY));
-    }
 
     @Override
     protected BlockState rotate(BlockState state, BlockRotation rotation) {

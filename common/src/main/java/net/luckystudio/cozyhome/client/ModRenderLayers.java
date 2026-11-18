@@ -232,7 +232,7 @@ public class ModRenderLayers {
                 ModBlocks.FALLING_LIQUID
         );
 
-        itemColors.register(((stack, tintIndex) -> DyedColorComponent.getColor(stack, -17170434)),
+        itemColors.register(((stack, tintIndex) -> ModColorHandler.getItemColor(stack)),
                 ModItems.CUSHION,
                 ModBlocks.OAK_COUCH,
                 ModBlocks.SPRUCE_COUCH,
@@ -264,7 +264,7 @@ public class ModRenderLayers {
 
         blockColors.register((state, view, pos, tintIndex) -> {
                     assert view != null;
-                    return ModColorHandler.getBlockColor(view.getBlockEntity(pos), -17170434);
+                    return ModColorHandler.getBlockColor(view.getBlockEntity(pos), ModColorHandler.getDefaultColor(state.getBlock()));
                 },
                 ModBlocks.OAK_COUCH,
                 ModBlocks.SPRUCE_COUCH,

@@ -373,6 +373,7 @@
   "message.cozyhome.telescope.waxing_gibbous_facts_0": "The moon grows fuller in a waxing gibbous phase, tomorrow night will be dangerous.",
 
   "cozyhome.color.white": "White",
+  "cozyhome.color.light_gray": "Light Gray",
   "cozyhome.color.gray": "Gray",
   "cozyhome.color.black": "Black",
   "cozyhome.color.brown": "Brown",
@@ -387,5 +388,5 @@
   "cozyhome.color.purple": "Purple",
   "cozyhome.color.magenta": "Magenta",
   "cozyhome.color.pink": "Pink",
-  "cozyhome.custom_colored": "Custom Colored"
+  "cozyhome.dyed_name": "%s %s"
 }

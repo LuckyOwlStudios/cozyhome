@@ -49,6 +49,11 @@ public abstract class AbstractLampBlock extends BlockWithEntity implements Conne
                 .with(LIT, Boolean.FALSE));
     }
 
+    /** The color this lamp shows before it has been dyed. */
+    public int getDefaultColor() {
+        return ModColorHandler.DEFAULT_COLOR;
+    }
+
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new LampBlockEntity(pos, state);
@@ -96,19 +101,9 @@ public abstract class AbstractLampBlock extends BlockWithEntity implements Conne
     protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.getBlockEntity(pos) instanceof LampBlockEntity lampBlockEntity) {
             VerticalLinearConnectionBlock connection = state.get(CONNECTION);
-                if (stack.getItem() instanceof DyeItem dyeItem) {
-                    final int itemColor = dyeItem.getColor().getEntityColor();
-                    final int blockColor = ModColorHandler.getBlockColor(lampBlockEntity, -17170434);
-                    final int newColor = ColorHelper.Argb.averageArgb(blockColor, itemColor);
-                    if (blockColor == newColor) {
-                        player.sendMessage(Text.translatable("message.cozyhome.same_color"), true);
-                        return ItemActionResult.SUCCESS;
-                    }
-                    ComponentMap components = ComponentMap.builder().add(DataComponentTypes.DYED_COLOR, new DyedColorComponent(newColor, false)).build();
-                    lampBlockEntity.setComponents(components);
-                    stack.decrementUnlessCreative(1, player);
-                    lampBlockEntity.markDirty();
-                    world.updateListeners(pos, state, state, 0);
+                ItemActionResult dyeResult = ModColorHandler.tryDyeBlock(stack, state, world, pos, player, lampBlockEntity);
+                if (dyeResult != null) {
+                    return dyeResult;
                 } else if (stack.getItem() == this.asItem() && hit.getSide() == Direction.UP) {
                     return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
                 } else {
@@ -159,7 +154,6 @@ public abstract class AbstractLampBlock extends BlockWithEntity implements Conne
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        tooltip.add(Text.translatable("tooltip.cozyhome.dyeable").formatted(Formatting.GRAY).append(""));
         tooltip.add(ScreenTexts.EMPTY);
         tooltip.add(Text.translatable("tooltip.cozyhome.interact_with_hand").formatted(Formatting.GRAY));
         tooltip.add(ModScreenTexts.entry().append(Text.translatable("tooltip.cozyhome.toggle_light")));

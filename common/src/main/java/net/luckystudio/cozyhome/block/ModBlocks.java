@@ -307,8 +307,8 @@ public class ModBlocks {
     public static final Block MANGROVE_LAMP = registerDyedBlock("mangrove_lamp", new MangroveLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));
     public static final Block CHERRY_LAMP = registerDyedBlock("cherry_lamp", createGenericLamp());
     public static final Block BAMBOO_LAMP = registerDyedBlock("bamboo_lamp", new BambooLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));
-    public static final Block CRIMSON_LAMP = registerBlock("crimson_lamp", new CrimsonLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));
-    public static final Block WARPED_LAMP = registerBlock("warped_lamp", new WarpedLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));
+    public static final Block CRIMSON_LAMP = registerDyedBlock("crimson_lamp", new CrimsonLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));
+    public static final Block WARPED_LAMP = registerDyedBlock("warped_lamp", new WarpedLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));
     public static final Block IRON_LAMP = registerDyedBlock("iron_lamp", new IronLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));
     public static final Block GLASS_LAMP = registerDyedBlock("glass_lamp", new GlassLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));
     public static final Block UNDEAD_LAMP = registerDyedBlock("undead_lamp", new UndeadLampBlock(AbstractBlock.Settings.copy(ModBlocks.OAK_LAMP)));

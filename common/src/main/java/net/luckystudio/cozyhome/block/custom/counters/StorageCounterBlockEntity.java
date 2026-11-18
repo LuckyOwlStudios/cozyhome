@@ -96,7 +96,7 @@ public class StorageCounterBlockEntity extends LootableContainerBlockEntity impl
     }
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
+    public DefaultedList<ItemStack> getInventoryStacks() {
         return inventory;
     }
 

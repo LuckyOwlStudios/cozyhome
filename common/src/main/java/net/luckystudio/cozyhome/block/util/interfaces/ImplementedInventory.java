@@ -17,7 +17,7 @@ public interface ImplementedInventory extends Inventory {
      * Retrieves the item list of this inventory.
      * Must return the same instance every time it's called.
      */
-    DefaultedList<ItemStack> getItems();
+    DefaultedList<ItemStack> getInventoryStacks();
 
     /**
      * Creates an inventory from the item list.
@@ -38,7 +38,7 @@ public interface ImplementedInventory extends Inventory {
      */
     @Override
     default int size() {
-        return getItems().size();
+        return getInventoryStacks().size();
     }
 
     /**
@@ -61,7 +61,7 @@ public interface ImplementedInventory extends Inventory {
      */
     @Override
     default ItemStack getStack(int slot) {
-        return getItems().get(slot);
+        return getInventoryStacks().get(slot);
     }
 
     /**
@@ -72,7 +72,7 @@ public interface ImplementedInventory extends Inventory {
      */
     @Override
     default ItemStack removeStack(int slot, int count) {
-        ItemStack result = Inventories.splitStack(getItems(), slot, count);
+        ItemStack result = Inventories.splitStack(getInventoryStacks(), slot, count);
         if (!result.isEmpty()) {
             markDirty();
         }
@@ -85,7 +85,7 @@ public interface ImplementedInventory extends Inventory {
      */
     @Override
     default ItemStack removeStack(int slot) {
-        return Inventories.removeStack(getItems(), slot);
+        return Inventories.removeStack(getInventoryStacks(), slot);
     }
 
     /**
@@ -97,7 +97,7 @@ public interface ImplementedInventory extends Inventory {
      */
     @Override
     default void setStack(int slot, ItemStack stack) {
-        getItems().set(slot, stack);
+        getInventoryStacks().set(slot, stack);
         if (stack.getCount() > stack.getMaxCount()) {
             stack.setCount(stack.getMaxCount());
         }
@@ -108,7 +108,7 @@ public interface ImplementedInventory extends Inventory {
      */
     @Override
     default void clear() {
-        getItems().clear();
+        getInventoryStacks().clear();
     }
 
     /**

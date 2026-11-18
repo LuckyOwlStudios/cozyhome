@@ -96,7 +96,7 @@ public class DrawerBlockEntity extends LootableContainerBlockEntity implements N
     }
 
     @Override
-    public DefaultedList<ItemStack> getItems() {
+    public DefaultedList<ItemStack> getInventoryStacks() {
         return inventory;
     }
 

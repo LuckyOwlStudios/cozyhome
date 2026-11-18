@@ -20,6 +20,8 @@ import net.luckystudio.cozyhome.block.custom.telescope.TelescopeModel;
 import net.luckystudio.cozyhome.block.custom.counters.StorageCounterBlockEntityRenderer;
 import net.luckystudio.cozyhome.block.custom.counters.StorageCounterDoorsModel;
 import net.luckystudio.cozyhome.client.ModEntityModelLayers;
+import net.luckystudio.cozyhome.client.renderer.HeldLiquidRenderer;
+import net.luckystudio.cozyhome.block.custom.water_holding_blocks.AbstractWaterHoldingBlockEntity;
 import net.luckystudio.cozyhome.entity.ModEntities;
 import net.luckystudio.cozyhome.entity.custom.SeatRenderer;
 import net.luckystudio.cozyhome.entity.model.*;
@@ -98,6 +100,9 @@ public class CozyHomeClient {
         renderers.register(ModBlockEntityTypes.GRANDFATHER_CLOCK_BLOCK_ENTITY, GrandfatherClockBlockEntityRenderer::new);
         renderers.register(ModBlockEntityTypes.WALL_CLOCK_BLOCK_ENTITY, WallClockBlockEntityRenderer::new);
         renderers.register(ModBlockEntityTypes.STORAGE_COUNTER_BLOCK_ENTITY, StorageCounterBlockEntityRenderer::new);
+        renderers.<AbstractWaterHoldingBlockEntity>register(ModBlockEntityTypes.SINK_BLOCK_ENTITY, HeldLiquidRenderer::new);
+        renderers.<AbstractWaterHoldingBlockEntity>register(ModBlockEntityTypes.BATHTUB_BLOCK_ENTITY, HeldLiquidRenderer::new);
+        renderers.<AbstractWaterHoldingBlockEntity>register(ModBlockEntityTypes.FOUNTAIN_BLOCK_ENTITY, HeldLiquidRenderer::new);
     }
 
     /** Items with a {@code builtin/entity} model that are drawn with a custom renderer. */

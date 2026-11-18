@@ -2,6 +2,7 @@ package net.luckystudio.cozyhome.block.util;
 
 import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.block.ModBlocks;
+import net.luckystudio.cozyhome.block.custom.fountains.FountainBlockEntity;
 import net.luckystudio.cozyhome.block.custom.water_holding_blocks.bathtub.BathTubBlockEntity;
 import net.luckystudio.cozyhome.block.custom.water_holding_blocks.sink.SinkBlockEntity;
 import net.luckystudio.cozyhome.block.custom.chimneys.ChimneyBlockEntity;
@@ -213,6 +214,29 @@ public class ModBlockEntityTypes {
                     ModBlocks.PURPUR_BATHTUB,
                     ModBlocks.IRON_BATHTUB,
                     ModBlocks.GOLD_BATHTUB
+            ).build(null));
+
+    public static final BlockEntityType<FountainBlockEntity> FOUNTAIN_BLOCK_ENTITY = Registry.register(
+            Registries.BLOCK_ENTITY_TYPE, Identifier.of(CozyHome.MOD_ID, "fountain_block_entity"),
+            BlockEntityType.Builder.create(FountainBlockEntity::new,
+                    ModBlocks.STONE_BRICK_FOUNTAIN,
+                    ModBlocks.MOSSY_STONE_BRICK_FOUNTAIN,
+                    ModBlocks.GRANITE_FOUNTAIN,
+                    ModBlocks.DIORITE_FOUNTAIN,
+                    ModBlocks.ANDESITE_FOUNTAIN,
+                    ModBlocks.DEEPSLATE_FOUNTAIN,
+                    ModBlocks.CALCITE_FOUNTAIN,
+                    ModBlocks.TUFF_FOUNTAIN,
+                    ModBlocks.BRICK_FOUNTAIN,
+                    ModBlocks.MUD_FOUNTAIN,
+                    ModBlocks.SANDSTONE_FOUNTAIN,
+                    ModBlocks.RED_SANDSTONE_FOUNTAIN,
+                    ModBlocks.PRISMARINE_FOUNTAIN,
+                    ModBlocks.NETHER_BRICK_FOUNTAIN,
+                    ModBlocks.RED_NETHER_BRICK_FOUNTAIN,
+                    ModBlocks.BLACKSTONE_FOUNTAIN,
+                    ModBlocks.ENDSTONE_FOUNTAIN,
+                    ModBlocks.PURPUR_FOUNTAIN
             ).build(null));
 
     public static final BlockEntityType<SinkBlockEntity> SINK_BLOCK_ENTITY = Registry.register(

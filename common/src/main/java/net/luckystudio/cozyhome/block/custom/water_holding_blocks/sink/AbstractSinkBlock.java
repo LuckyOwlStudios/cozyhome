@@ -7,6 +7,9 @@ import net.luckystudio.cozyhome.block.util.ModProperties;
 import net.luckystudio.cozyhome.block.util.enums.ContainsBlock;
 import net.luckystudio.cozyhome.block.util.interfaces.WaterHoldingBlock;
 import net.luckystudio.cozyhome.util.ModScreenTexts;
+import net.luckystudio.cozyhome.block.util.LiquidHelper;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -83,28 +86,28 @@ public abstract class AbstractSinkBlock extends BlockWithEntity implements Water
             return ItemActionResult.SUCCESS;
         }
 
-        // --- 1. Filling a bucket from a full block ---
+        // --- 1. Filling a bucket from a full block (any fluid that has a bucket) ---
         if (item == Items.BUCKET && level == 3 && contents != ContainsBlock.NONE) {
-            ItemStack filledBucket = contents == ContainsBlock.WATER ? new ItemStack(Items.WATER_BUCKET) : new ItemStack(Items.LAVA_BUCKET);
-            SoundEvent soundEvent = contents == ContainsBlock.WATER ? SoundEvents.ITEM_BUCKET_FILL : SoundEvents.ITEM_BUCKET_FILL_LAVA;
+            Fluid fluid = LiquidHelper.getFluid(state, world, pos);
+            ItemStack filledBucket = LiquidHelper.filledBucket(fluid);
+            if (filledBucket.isEmpty()) return WaterHoldingBlock.toggleSwitch(state, world, pos, player);
             player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, filledBucket));
             player.incrementStat(Stats.USE_CAULDRON);
             player.incrementStat(Stats.USED.getOrCreateStat(item));
-            world.playSound(null, pos, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            world.setBlockState(pos, state.with(LEVEL, 0).with(CONTAINS, ContainsBlock.NONE), 3);
+            world.playSound(null, pos, LiquidHelper.fillSound(fluid), SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.setBlockState(pos, LiquidHelper.withFluid(world, pos, state, Fluids.EMPTY).with(LEVEL, 0), 3);
             world.emitGameEvent(null, GameEvent.FLUID_PICKUP, pos);
             return ItemActionResult.SUCCESS;
         }
 
-        // --- 2. Pouring water/lava bucket into the block ---
-        if ((item == Items.WATER_BUCKET || item == Items.LAVA_BUCKET) && level < 3) {
-            ContainsBlock newContents = item == Items.WATER_BUCKET ? ContainsBlock.WATER : ContainsBlock.LAVA;
-            SoundEvent soundEvent = newContents == ContainsBlock.WATER ? SoundEvents.ITEM_BUCKET_EMPTY : SoundEvents.ITEM_BUCKET_EMPTY_LAVA;
+        // --- 2. Pouring any bucket of liquid (vanilla or modded) into the block ---
+        Fluid bucketFluid = LiquidHelper.fluidInBucket(stack);
+        if (bucketFluid != Fluids.EMPTY && level < 3 && LiquidHelper.canMix(LiquidHelper.getFluid(state, world, pos), bucketFluid)) {
             player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.BUCKET)));
             player.incrementStat(Stats.FILL_CAULDRON);
             player.incrementStat(Stats.USED.getOrCreateStat(item));
-            world.setBlockState(pos, state.with(LEVEL, 3).with(CONTAINS, newContents), 3);
-            world.playSound(null, pos, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.setBlockState(pos, LiquidHelper.withFluid(world, pos, state, bucketFluid).with(LEVEL, 3), 3);
+            world.playSound(null, pos, LiquidHelper.emptySound(bucketFluid), SoundCategory.BLOCKS, 1.0F, 1.0F);
             world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
             return ItemActionResult.SUCCESS;
         }
@@ -184,39 +187,38 @@ public abstract class AbstractSinkBlock extends BlockWithEntity implements Water
 
     @Override
     public void addLiquid(BlockState state, World world, BlockPos pos, BlockState pullState, Direction pullDirection) {
+        BlockPos pullPos = pos.offset(pullDirection);
+        Fluid fluid = LiquidHelper.pullableFluid(pullState);
+        if (fluid == Fluids.EMPTY || !LiquidHelper.canMix(LiquidHelper.getFluid(state, world, pos), fluid)) return;
         int level = state.get(LEVEL);
-        int newLevel = Math.min(3, level + 1); // ensures level never goes above 2
-        ContainsBlock contains;
-        if (pullState.getFluidState().isIn(FluidTags.WATER) || pullState.contains(Properties.WATERLOGGED) && pullState.get(Properties.WATERLOGGED)) {
-            contains = ContainsBlock.WATER;
-            world.setBlockState(pos, state.with(LEVEL, newLevel).with(CONTAINS, contains), 3);
-            return;
-        }
-        if (pullState.getFluidState().isIn(FluidTags.LAVA)) {
-            world.setBlockState(pos.offset(pullDirection), Blocks.AIR.getDefaultState(), 3);
-            contains = ContainsBlock.LAVA;
-            world.setBlockState(pos, state.with(LEVEL, 3).with(CONTAINS, contains), 3);
-            return;
-        }
+
         if (pullState.getBlock() == Blocks.WATER_CAULDRON) {
-            LeveledCauldronBlock.decrementFluidLevel(pullState, world, pos.offset(pullDirection));
-            contains = ContainsBlock.WATER;
-            world.setBlockState(pos, state.with(LEVEL, newLevel).with(CONTAINS, contains), 3);
+            // One level of water per cauldron level
+            LeveledCauldronBlock.decrementFluidLevel(pullState, world, pullPos);
+            world.setBlockState(pos, LiquidHelper.withFluid(world, pos, state, fluid).with(LEVEL, Math.min(3, level + 1)), 3);
             return;
         }
         if (pullState.getBlock() == Blocks.LAVA_CAULDRON) {
-            world.setBlockState(pos.offset(pullDirection), Blocks.CAULDRON.getDefaultState(), 3);
-            contains = ContainsBlock.LAVA;
-            world.setBlockState(pos, state.with(LEVEL, 3).with(CONTAINS, contains), 3);
+            world.setBlockState(pullPos, Blocks.CAULDRON.getDefaultState(), 3);
+            world.setBlockState(pos, LiquidHelper.withFluid(world, pos, state, fluid).with(LEVEL, 3), 3);
+            return;
         }
+        if (fluid == Fluids.WATER) {
+            // Water sources are infinite: fill one level at a time without using them up
+            world.setBlockState(pos, LiquidHelper.withFluid(world, pos, state, fluid).with(LEVEL, Math.min(3, level + 1)), 3);
+            return;
+        }
+        // Lava and any other fluid: one source block fills the sink
+        LiquidHelper.drainSource(world, pullPos, pullState, fluid);
+        world.setBlockState(pos, LiquidHelper.withFluid(world, pos, state, fluid).with(LEVEL, 3), 3);
     }
 
     @Override
     public void removeLiquid(BlockState state, World world, BlockPos pos) {
         int level = state.get(LEVEL);
         int newLevel = Math.max(0, level - 1); // ensures level never goes below 0
-        ContainsBlock contains = newLevel == 0 ? ContainsBlock.NONE : state.get(CONTAINS);
-        world.setBlockState(pos, state.with(LEVEL, newLevel).with(CONTAINS, contains), 3);
+        BlockState newState = newLevel == 0 ? LiquidHelper.withFluid(world, pos, state, Fluids.EMPTY) : state;
+        world.setBlockState(pos, newState.with(LEVEL, newLevel), 3);
     }
 
     @Override
@@ -228,9 +230,8 @@ public abstract class AbstractSinkBlock extends BlockWithEntity implements Water
     @Override
     public Direction pullingDirection(BlockState state, World world, BlockPos pos) {
         for (Direction direction : getDirectionsToPull(state)) {
-            BlockPos offsetPos = pos.offset(direction);
-            BlockState offsetState = world.getBlockState(offsetPos);
-            if (offsetState.getFluidState().isIn(FluidTags.WATER) || offsetState.getFluidState().isIn(FluidTags.LAVA) || offsetState.getBlock() == Blocks.WATER_CAULDRON || offsetState.getBlock() == Blocks.LAVA_CAULDRON) {
+            Fluid fluid = LiquidHelper.pullableFluid(world.getBlockState(pos.offset(direction)));
+            if (fluid != Fluids.EMPTY && LiquidHelper.canMix(LiquidHelper.getFluid(state, world, pos), fluid)) {
                 return direction;
             }
         }

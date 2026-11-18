@@ -4,7 +4,13 @@ import net.luckystudio.cozyhome.block.custom.water_holding_blocks.sink.AbstractS
 import net.luckystudio.cozyhome.block.util.ModProperties;
 import net.luckystudio.cozyhome.block.util.enums.ContainsBlock;
 import net.luckystudio.cozyhome.block.util.interfaces.WaterHoldingBlock;
+import net.luckystudio.cozyhome.block.util.LiquidHelper;
 import net.minecraft.block.BlockState;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -27,6 +33,8 @@ public class AbstractWaterHoldingBlockEntity extends BlockEntity {
 
     public int timer;
     public int soupTime;
+    // Only used for fluids other than water and lava (contains=custom); see LiquidHelper
+    private Fluid storedFluid = Fluids.EMPTY;
 
     public AbstractWaterHoldingBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -58,31 +66,28 @@ public class AbstractWaterHoldingBlockEntity extends BlockEntity {
         // Determine the liquid we should be pulling
         BlockPos pullPos = blockPos.offset(pullDirection);
         BlockState pullState = world.getBlockState(pullPos);
-        ContainsBlock pullingLiquid;
-        if (pullState.getFluidState().isIn(FluidTags.WATER) || pullState.contains(Properties.WATERLOGGED) && pullState.get(Properties.WATERLOGGED) || pullState.getBlock() == Blocks.WATER_CAULDRON) {
-            pullingLiquid = ContainsBlock.WATER;
-        } else if (pullState.getFluidState().isIn(FluidTags.LAVA) || pullState.getBlock() == Blocks.LAVA_CAULDRON) {
-            pullingLiquid = ContainsBlock.LAVA;
-        }else {
-            pullingLiquid = ContainsBlock.NONE;
-        }
+        Fluid pullingFluid = LiquidHelper.pullableFluid(pullState);
 
         // Choose the correct particles
         ParticleEffect dripParticle;
         ParticleEffect splashParticle;
 
-        if (pullingLiquid == ContainsBlock.WATER) {
+        if (pullingFluid == Fluids.WATER) {
             dripParticle = ParticleTypes.FALLING_DRIPSTONE_WATER;
             splashParticle = ParticleTypes.SPLASH;
-        } else {
+        } else if (pullingFluid == Fluids.LAVA) {
             dripParticle = ParticleTypes.FALLING_LAVA;
             splashParticle = ParticleTypes.LANDING_LAVA;
+        } else {
+            BlockState fluidBlock = pullingFluid.getDefaultState().getBlockState();
+            dripParticle = new BlockStateParticleEffect(ParticleTypes.FALLING_DUST, fluidBlock);
+            splashParticle = new BlockStateParticleEffect(ParticleTypes.BLOCK, fluidBlock);
         }
 
         // Particle positions
         double faucetHeight = state.getBlock() instanceof AbstractSinkBlock ? 0.6 : 0.4875; // Adjust this value to change the height of the faucet
         Vec3d centerTop = Vec3d.ofCenter(blockPos).add(0.0, faucetHeight, 0.0);
-        Vec3d center = Vec3d.ofCenter(blockPos).add(blockPos.getX() + 0.5, blockPos.getY() + waterHoldingBlock.getLiquidLevelHeight(state), blockPos.getZ() + 0.5);
+        Vec3d center = new Vec3d(blockPos.getX() + 0.5, blockPos.getY() + waterHoldingBlock.getLiquidLevelHeight(state), blockPos.getZ() + 0.5);
 
         // Spawn particles
         world.addParticle(dripParticle, centerTop.x, centerTop.y, centerTop.z, 0.0, 0.0, 0.0);
@@ -101,6 +106,9 @@ public class AbstractWaterHoldingBlockEntity extends BlockEntity {
         super.writeNbt(nbt, registryLookup);
         nbt.putInt("timer", this.timer);
         nbt.putInt("soupTime", this.soupTime);
+        if (this.storedFluid != Fluids.EMPTY) {
+            nbt.putString("fluid", Registries.FLUID.getId(this.storedFluid).toString());
+        }
     }
 
     @Override
@@ -108,6 +116,21 @@ public class AbstractWaterHoldingBlockEntity extends BlockEntity {
         super.readNbt(nbt, registryLookup);
         this.timer = nbt.getInt("timer");
         this.soupTime = nbt.getInt("soupTime");
+        Identifier fluidId = nbt.contains("fluid") ? Identifier.tryParse(nbt.getString("fluid")) : null;
+        this.storedFluid = fluidId == null ? Fluids.EMPTY : Registries.FLUID.get(fluidId);
+    }
+
+    public Fluid getStoredFluid() {
+        return this.storedFluid;
+    }
+
+    public void setStoredFluid(Fluid fluid) {
+        this.storedFluid = fluid == null ? Fluids.EMPTY : fluid;
+        this.markDirty();
+        if (this.world != null && !this.world.isClient) {
+            BlockState state = this.getCachedState();
+            this.world.updateListeners(this.pos, state, state, 3);
+        }
     }
 
     @Nullable

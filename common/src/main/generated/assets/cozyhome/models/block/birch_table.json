@@ -1,7 +1,9 @@
 {
-  "parent": "cozyhome:block/table/template_table",
+  "parent": "cozyhome:block/table/classic_table",
   "textures": {
-    "all": "cozyhome:block/table/birch_table",
-    "particle": "minecraft:block/birch_planks"
+    "legs": "cozyhome:block/table/birch_table_legs",
+    "particle": "minecraft:block/birch_planks",
+    "sides": "cozyhome:block/table/birch_table_sides",
+    "top": "cozyhome:block/table/birch_table_top"
   }
 }

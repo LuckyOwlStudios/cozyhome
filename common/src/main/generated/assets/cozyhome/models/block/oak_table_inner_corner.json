@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/table/classic_table_inner_corner",
+  "textures": {
+    "legs": "cozyhome:block/table/oak_table_legs",
+    "particle": "minecraft:block/oak_planks",
+    "sides": "cozyhome:block/table/oak_table_sides",
+    "top": "cozyhome:block/table/oak_table_top"
+  }
+}

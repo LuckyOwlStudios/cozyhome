@@ -15,6 +15,7 @@ import net.minecraft.data.DataWriter;
 import net.minecraft.data.client.*;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
@@ -139,21 +140,21 @@ public class ModModelProvider implements DataProvider {
         registerSinkCounter(blockStateModelGenerator, ModBlocks.CRIMSON_SINK_COUNTER, CozyHome.id("block/faucet/iron_faucet"), CozyHome.id("block/break/crimson_furniture"));
         registerSinkCounter(blockStateModelGenerator, ModBlocks.WARPED_SINK_COUNTER, CozyHome.id("block/faucet/iron_faucet"), CozyHome.id("block/break/warped_furniture"));
 
-        registerTable(blockStateModelGenerator, ModBlocks.OAK_TABLE, TableTypes.GENERIC, Identifier.of("block/oak_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.SPRUCE_TABLE, TableTypes.GENERIC, Identifier.of("block/spruce_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.BIRCH_TABLE, TableTypes.GENERIC, Identifier.of("block/birch_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.JUNGLE_TABLE, TableTypes.GENERIC, Identifier.of("block/jungle_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.ACACIA_TABLE, TableTypes.GENERIC, Identifier.of("block/acacia_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.DARK_OAK_TABLE, TableTypes.GENERIC, Identifier.of("block/dark_oak_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.MANGROVE_TABLE, TableTypes.GENERIC, Identifier.of("block/mangrove_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.CHERRY_TABLE, TableTypes.GENERIC, Identifier.of("block/cherry_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.BAMBOO_TABLE, TableTypes.GENERIC, Identifier.of("block/bamboo_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.CRIMSON_TABLE, TableTypes.GENERIC, Identifier.of("block/crimson_planks"));
-        registerTable(blockStateModelGenerator, ModBlocks.WARPED_TABLE, TableTypes.GENERIC, Identifier.of("block/warped_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.OAK_TABLE, TableTypes.CLASSIC, Identifier.of("block/oak_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.SPRUCE_TABLE, TableTypes.CLASSIC, Identifier.of("block/spruce_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.BIRCH_TABLE, TableTypes.CLASSIC, Identifier.of("block/birch_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.JUNGLE_TABLE, TableTypes.CLASSIC, Identifier.of("block/jungle_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.ACACIA_TABLE, TableTypes.CLASSIC, Identifier.of("block/acacia_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.DARK_OAK_TABLE, TableTypes.CLASSIC, Identifier.of("block/dark_oak_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.MANGROVE_TABLE, TableTypes.CLASSIC, Identifier.of("block/mangrove_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.CHERRY_TABLE, TableTypes.CLASSIC, Identifier.of("block/cherry_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.BAMBOO_TABLE, TableTypes.CLASSIC, Identifier.of("block/bamboo_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.CRIMSON_TABLE, TableTypes.CLASSIC, Identifier.of("block/crimson_planks"));
+        registerTable(blockStateModelGenerator, ModBlocks.WARPED_TABLE, TableTypes.CLASSIC, Identifier.of("block/warped_planks"));
         registerTable(blockStateModelGenerator, ModBlocks.IRON_TABLE, TableTypes.SHELF, CozyHome.id("block/break/iron_furniture"));
         registerTable(blockStateModelGenerator, ModBlocks.GLASS_TABLE, TableTypes.SHELF, CozyHome.id("block/break/glass_furniture"));
         registerTable(blockStateModelGenerator, ModBlocks.UNDEAD_TABLE, TableTypes.GENERIC, CozyHome.id("block/break/undead_furniture"));
-        registerTable(blockStateModelGenerator, ModBlocks.OMINOUS_TABLE, TableTypes.GENERIC, CozyHome.id("block/break/ominous_furniture"));
+        registerTable(blockStateModelGenerator, ModBlocks.OMINOUS_TABLE, TableTypes.CLASSIC, CozyHome.id("block/break/ominous_furniture"));
 
         registerBuiltinWithParticleAndParentedItemModel(blockStateModelGenerator, ModBlocks.OAK_CHAIR, Identifier.of("block/oak_planks"), ModItemTemplates.CHAIR.get());
         registerBuiltinWithParticleAndParentedItemModel(blockStateModelGenerator, ModBlocks.SPRUCE_CHAIR, Identifier.of("block/spruce_planks"), ModItemTemplates.CHAIR.get());
@@ -575,57 +576,42 @@ public class ModModelProvider implements DataProvider {
                 ));
     }
 
+    // The block model shows the open cabinet front; the doors themselves are drawn and
+    // animated by StorageCounterBlockEntityRenderer. The item uses a closed-front model.
     public final void registerStorageCounter(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier breakParticle) {
-        Identifier top = Identifier.of(Registries.BLOCK.getId(block).getNamespace(), "block/counter/" + Registries.BLOCK.getId(block).getPath().replace("_storage", "") + "_top");
-        Identifier side = Identifier.of(Registries.BLOCK.getId(block).getNamespace(), "block/counter/" + Registries.BLOCK.getId(block).getPath().replace("_storage", "") + "_side");
-        Identifier bottom = Identifier.of(Registries.BLOCK.getId(block).getNamespace(), "block/counter/" + Registries.BLOCK.getId(block).getPath().replace("_storage", "") + "_bottom");
-        Identifier open = Identifier.of(Registries.BLOCK.getId(block).getNamespace(), "block/counter/" + Registries.BLOCK.getId(block).getPath().replace("_storage", "") + "_open");
-        Identifier closed = Identifier.of(Registries.BLOCK.getId(block).getNamespace(), "block/counter/" + Registries.BLOCK.getId(block).getPath().replace("_storage", "") + "_closed");
-        Identifier back = Identifier.of(Registries.BLOCK.getId(block).getNamespace(), "block/counter/" + Registries.BLOCK.getId(block).getPath().replace("_storage", "") + "_front");
+        Identifier blockId = Registries.BLOCK.getId(block);
+        String base = "block/counter/" + blockId.getPath().replace("_storage", "");
+        Identifier top = Identifier.of(blockId.getNamespace(), base + "_top");
+        Identifier side = Identifier.of(blockId.getNamespace(), base + "_side");
+        Identifier bottom = Identifier.of(blockId.getNamespace(), base + "_bottom");
+        Identifier open = Identifier.of(blockId.getNamespace(), base + "_open");
+        Identifier closed = Identifier.of(blockId.getNamespace(), base + "_closed");
+        Identifier back = Identifier.of(blockId.getNamespace(), base + "_front");
 
-        TextureMap storageCounter = new TextureMap()
+        TextureMap openFront = new TextureMap()
+                .put(TextureKey.TOP, top)
+                .put(TextureKey.SIDE, side)
+                .put(TextureKey.BOTTOM, bottom)
+                .put(TextureKey.FRONT, open)
+                .put(TextureKey.BACK, back)
+                .put(TextureKey.PARTICLE, breakParticle);
+        TextureMap closedFront = new TextureMap()
                 .put(TextureKey.TOP, top)
                 .put(TextureKey.SIDE, side)
                 .put(TextureKey.BOTTOM, bottom)
                 .put(TextureKey.FRONT, closed)
                 .put(TextureKey.BACK, back)
                 .put(TextureKey.PARTICLE, breakParticle);
-        TextureMap storageCounterOpen = new TextureMap()
-                .put(TextureKey.TOP, top)
-                .put(TextureKey.SIDE, side)
-                .put(TextureKey.BOTTOM, bottom)
-                .put(ModTextureKey.OPEN, open)
-                .put(ModTextureKey.CLOSED, closed)
-                .put(TextureKey.BACK, back)
-                .put(TextureKey.PARTICLE, breakParticle);
-        Identifier storageCounterModelId = ModModels.COUNTER.upload(block, storageCounter, blockStateModelGenerator.modelCollector);
-        Identifier storageCounterOpenModelId = ModModels.STORAGE_COUNTER.upload(block, storageCounterOpen, blockStateModelGenerator.modelCollector);
-        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block)
-                .coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING, Properties.OPEN)
-                        .register(Direction.NORTH, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, storageCounterModelId)
-                                .put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.EAST,false,  BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, storageCounterModelId)
-                                .put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(Direction.SOUTH, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, storageCounterModelId))
-                        .register(Direction.WEST, false, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, storageCounterModelId)
-                                .put(VariantSettings.Y, VariantSettings.Rotation.R90))
-
-                        .register(Direction.NORTH, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, storageCounterOpenModelId)
-                                .put(VariantSettings.Y, VariantSettings.Rotation.R180))
-                        .register(Direction.EAST, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, storageCounterOpenModelId)
-                                .put(VariantSettings.Y, VariantSettings.Rotation.R270))
-                        .register(Direction.SOUTH, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, storageCounterOpenModelId))
-                        .register(Direction.WEST, true, BlockStateVariant.create()
-                                .put(VariantSettings.MODEL, storageCounterOpenModelId)
-                                .put(VariantSettings.Y, VariantSettings.Rotation.R90))
-                ));
+        Identifier modelId = ModModels.COUNTER.upload(block, openFront, blockStateModelGenerator.modelCollector);
+        Identifier inventoryModelId = ModModels.COUNTER_INVENTORY.upload(block, closedFront, blockStateModelGenerator.modelCollector);
+        blockStateModelGenerator.registerParentedItemModel(block, inventoryModelId);
+        blockStateModelGenerator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block,
+                        BlockStateVariant.create().put(VariantSettings.MODEL, modelId))
+                .coordinate(BlockStateVariantMap.create(Properties.HORIZONTAL_FACING)
+                        .register(Direction.NORTH, BlockStateVariant.create().put(VariantSettings.Y, VariantSettings.Rotation.R180))
+                        .register(Direction.EAST, BlockStateVariant.create().put(VariantSettings.Y, VariantSettings.Rotation.R270))
+                        .register(Direction.SOUTH, BlockStateVariant.create())
+                        .register(Direction.WEST, BlockStateVariant.create().put(VariantSettings.Y, VariantSettings.Rotation.R90))));
     }
 
     public final void registerSinkCounter(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier faucetTexture, Identifier breakParticle) {
@@ -688,6 +674,10 @@ public class ModModelProvider implements DataProvider {
     }
 
     public final void registerTable(BlockStateModelGenerator blockStateModelGenerator, Block block, TableTypes tableTypes, Identifier breakParticle) {
+        if (tableTypes == TableTypes.CLASSIC) {
+            registerClassicTable(blockStateModelGenerator, block, breakParticle);
+            return;
+        }
         // Define texture maps
         String blockNamespace = Registries.BLOCK.getId(block).getNamespace();
         String blockPath = Registries.BLOCK.getId(block).getPath();
@@ -772,6 +762,80 @@ public class ModModelProvider implements DataProvider {
                 .with(When.create().set(Properties.NORTH, true).set(Properties.EAST, true).set(Properties.SOUTH, true).set(Properties.WEST, false),
                         BlockStateVariant.create().put(VariantSettings.MODEL, tableSideModelID).put(VariantSettings.Y, VariantSettings.Rotation.R270))
         );
+    }
+
+    // The classic table look: one top piece per quarter, side aprons and legs that
+    // appear only on outer corners. Same multipart layout as the original NeoForge rewrite.
+    public final void registerClassicTable(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier breakParticle) {
+        Identifier blockId = Registries.BLOCK.getId(block);
+        String base = "block/table/" + blockId.getPath();
+        TextureMap textures = new TextureMap()
+                .put(TextureKey.TOP, Identifier.of(blockId.getNamespace(), base + "_top"))
+                .put(ModTextureKey.SIDES, Identifier.of(blockId.getNamespace(), base + "_sides"))
+                .put(ModTextureKey.LEGS, Identifier.of(blockId.getNamespace(), base + "_legs"))
+                .put(TextureKey.PARTICLE, breakParticle);
+
+        Identifier full = ModModels.CLASSIC_TABLE.upload(block, textures, blockStateModelGenerator.modelCollector);
+        Identifier middlePiece = ModModels.CLASSIC_TABLE_MIDDLE_PIECE.upload(block, textures, blockStateModelGenerator.modelCollector);
+        Identifier innerCorner = ModModels.CLASSIC_TABLE_INNER_CORNER.upload(block, textures, blockStateModelGenerator.modelCollector);
+        Identifier outerCorner = ModModels.CLASSIC_TABLE_OUTER_CORNER.upload(block, textures, blockStateModelGenerator.modelCollector);
+        Identifier leftSide = ModModels.CLASSIC_TABLE_LEFT_SIDE.upload(block, textures, blockStateModelGenerator.modelCollector);
+        Identifier rightSide = ModModels.CLASSIC_TABLE_RIGHT_SIDE.upload(block, textures, blockStateModelGenerator.modelCollector);
+
+        VariantSettings.Rotation[] rotations = {VariantSettings.Rotation.R0, VariantSettings.Rotation.R90, VariantSettings.Rotation.R180, VariantSettings.Rotation.R270};
+        // Quarters in rotation order: NW, NE, SE, SW. Each entry is {first side, second side, diagonal}.
+        BooleanProperty[][] quarters = {
+                {Properties.NORTH, Properties.WEST, ModProperties.NORTH_WEST},
+                {Properties.NORTH, Properties.EAST, ModProperties.NORTH_EAST},
+                {Properties.SOUTH, Properties.EAST, ModProperties.SOUTH_EAST},
+                {Properties.SOUTH, Properties.WEST, ModProperties.SOUTH_WEST}
+        };
+        // Apron sides in rotation order: {connected side, open side} for the left and right pieces.
+        BooleanProperty[][] leftSides = {
+                {Properties.SOUTH, Properties.EAST},
+                {Properties.WEST, Properties.SOUTH},
+                {Properties.NORTH, Properties.WEST},
+                {Properties.EAST, Properties.NORTH}
+        };
+        BooleanProperty[][] rightSides = {
+                {Properties.SOUTH, Properties.WEST},
+                {Properties.WEST, Properties.NORTH},
+                {Properties.NORTH, Properties.EAST},
+                {Properties.EAST, Properties.SOUTH}
+        };
+
+        MultipartBlockStateSupplier supplier = MultipartBlockStateSupplier.create(block)
+                .with(When.create()
+                                .set(Properties.NORTH, false).set(Properties.EAST, false)
+                                .set(Properties.SOUTH, false).set(Properties.WEST, false)
+                                .set(ModProperties.NORTH_EAST, false).set(ModProperties.NORTH_WEST, false)
+                                .set(ModProperties.SOUTH_EAST, false).set(ModProperties.SOUTH_WEST, false),
+                        BlockStateVariant.create().put(VariantSettings.MODEL, full));
+
+        for (int i = 0; i < 4; i++) {
+            BooleanProperty[] q = quarters[i];
+            supplier.with(When.create().set(q[0], true).set(q[1], true).set(q[2], true),
+                    BlockStateVariant.create().put(VariantSettings.MODEL, middlePiece).put(VariantSettings.Y, rotations[i]));
+        }
+        for (int i = 0; i < 4; i++) {
+            BooleanProperty[] q = quarters[i];
+            supplier.with(When.create().set(q[0], true).set(q[1], true).set(q[2], false),
+                    BlockStateVariant.create().put(VariantSettings.MODEL, innerCorner).put(VariantSettings.Y, rotations[i]));
+        }
+        for (int i = 0; i < 4; i++) {
+            BooleanProperty[] q = quarters[i];
+            supplier.with(When.create().set(q[0], false).set(q[1], false).set(q[2], false),
+                    BlockStateVariant.create().put(VariantSettings.MODEL, outerCorner).put(VariantSettings.Y, rotations[i]));
+        }
+        for (int i = 0; i < 4; i++) {
+            supplier.with(When.create().set(leftSides[i][0], true).set(leftSides[i][1], false),
+                    BlockStateVariant.create().put(VariantSettings.MODEL, leftSide).put(VariantSettings.Y, rotations[i]));
+        }
+        for (int i = 0; i < 4; i++) {
+            supplier.with(When.create().set(rightSides[i][0], true).set(rightSides[i][1], false),
+                    BlockStateVariant.create().put(VariantSettings.MODEL, rightSide).put(VariantSettings.Y, rotations[i]));
+        }
+        blockStateModelGenerator.blockStateCollector.accept(supplier);
     }
 
     public final void registerLamp(BlockStateModelGenerator blockStateModelGenerator, Block block, Identifier breakParticle, boolean useGenericLampModel, boolean useGenericMiddleModel, boolean useGenericBaseModel) {

@@ -14,7 +14,7 @@ public class TableBlock extends AbstractHorizontalConnectingBlock implements Wat
     public static final MapCodec<TableBlock> CODEC = createCodec(TableBlock::new);
 
     @Override
-    public MapCodec<TableBlock> getCodec() {
+    public MapCodec<? extends TableBlock> getCodec() {
         return CODEC;
     }
 

@@ -1,0 +1,7 @@
+{
+  "parent": "cozyhome:block/table/classic_table_middle_piece",
+  "textures": {
+    "particle": "cozyhome:block/break/ominous_furniture",
+    "top": "cozyhome:block/table/ominous_table_top"
+  }
+}

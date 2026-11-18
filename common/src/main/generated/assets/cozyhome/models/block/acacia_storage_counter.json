@@ -3,7 +3,7 @@
   "textures": {
     "back": "cozyhome:block/counter/acacia_counter_front",
     "bottom": "cozyhome:block/counter/acacia_counter_bottom",
-    "front": "cozyhome:block/counter/acacia_counter_closed",
+    "front": "cozyhome:block/counter/acacia_counter_open",
     "particle": "cozyhome:block/break/acacia_furniture",
     "side": "cozyhome:block/counter/acacia_counter_side",
     "top": "cozyhome:block/counter/acacia_counter_top"

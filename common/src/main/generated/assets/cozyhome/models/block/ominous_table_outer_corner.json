@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/table/classic_table_outer_corner",
+  "textures": {
+    "legs": "cozyhome:block/table/ominous_table_legs",
+    "particle": "cozyhome:block/break/ominous_furniture",
+    "sides": "cozyhome:block/table/ominous_table_sides",
+    "top": "cozyhome:block/table/ominous_table_top"
+  }
+}

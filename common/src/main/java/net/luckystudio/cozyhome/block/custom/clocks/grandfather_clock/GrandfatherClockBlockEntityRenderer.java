@@ -65,8 +65,8 @@ public class GrandfatherClockBlockEntityRenderer implements BlockEntityRenderer<
             GrandfatherClockBlock.GrandfatherClockType clockType = ((GrandfatherClockBlock) blockState.getBlock()).getGrandfatherClockType();
 
             // Interpolate angles for smooth rendering
-            float interpolatedHourAngle = MathHelper.lerp(tickDelta, entity.lastHourHandAngle, entity.currentHourHandAngle);
-            float interpolatedMinuteAngle = MathHelper.lerp(tickDelta, entity.lastMinuteHandAngle, entity.currentMinuteHandAngle);
+            float interpolatedHourAngle = MathHelper.lerpAngleDegrees(tickDelta, entity.lastHourHandAngle, entity.currentHourHandAngle);
+            float interpolatedMinuteAngle = MathHelper.lerpAngleDegrees(tickDelta, entity.lastMinuteHandAngle, entity.currentMinuteHandAngle);
             float interpolatedPendulumAngle = MathHelper.lerp(tickDelta, entity.lastPendulumAngle, entity.currentPendulumAngle);
 
             // Set angles in the model

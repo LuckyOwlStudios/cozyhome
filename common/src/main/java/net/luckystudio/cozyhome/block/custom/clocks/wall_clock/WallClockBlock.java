@@ -22,6 +22,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.block.enums.BlockFace;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
@@ -42,11 +44,15 @@ public class WallClockBlock extends BlockWithEntity implements Waterloggable{
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    // Wall clocks can also stand on the floor or hang from the ceiling
+    public static final EnumProperty<BlockFace> FACE = Properties.BLOCK_FACE;
 
     private static final VoxelShape NORTH_SHAPE = WallClockBlock.createCuboidShape(2, 2, 15, 14, 14, 16);
     private static final VoxelShape EAST_SHAPE = WallClockBlock.createCuboidShape(0, 2, 2, 1, 14, 14);
     private static final VoxelShape SOUTH_SHAPE = WallClockBlock.createCuboidShape(2, 2, 0, 14, 14, 1);
     private static final VoxelShape WEST_SHAPE = WallClockBlock.createCuboidShape(15, 2, 2, 16, 14, 14);
+    private static final VoxelShape CENTER_NORTH_SOUTH_SHAPE = WallClockBlock.createCuboidShape(2, 2, 7.5, 14, 14, 8.5);
+    private static final VoxelShape CENTER_EAST_WEST_SHAPE = WallClockBlock.createCuboidShape(7.5, 2, 2, 8.5, 14, 14);
 
     private final ClockType type;
 
@@ -59,13 +65,14 @@ public class WallClockBlock extends BlockWithEntity implements Waterloggable{
         super(settings);
         this.setDefaultState(this.getDefaultState()
                 .with(FACING, Direction.NORTH)
+                .with(FACE, BlockFace.WALL)
                 .with(WATERLOGGED, Boolean.FALSE));
         this.type = grandfatherClockType;
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(FACING, WATERLOGGED);
+        builder.add(FACING, FACE, WATERLOGGED);
     }
 
     /**
@@ -73,6 +80,9 @@ public class WallClockBlock extends BlockWithEntity implements Waterloggable{
      */
     @Override
     protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        if (state.get(FACE) != BlockFace.WALL) {
+            return state.get(FACING).getAxis() == Direction.Axis.Z ? CENTER_NORTH_SOUTH_SHAPE : CENTER_EAST_WEST_SHAPE;
+        }
         return switch (state.get(FACING)) {
             case NORTH -> NORTH_SHAPE;
             case SOUTH -> SOUTH_SHAPE;
@@ -96,37 +106,56 @@ public class WallClockBlock extends BlockWithEntity implements Waterloggable{
         return validateTicker(type, ModBlockEntityTypes.WALL_CLOCK_BLOCK_ENTITY, WallClockBlockEntity::tick);
     }
 
+    /** The direction of the block this clock hangs on or stands on. */
+    public static Direction getSupportDirection(BlockState state) {
+        return switch (state.get(FACE)) {
+            case FLOOR -> Direction.DOWN;
+            case CEILING -> Direction.UP;
+            default -> state.get(FACING).getOpposite();
+        };
+    }
+
     @Override
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return world.getBlockState(pos.offset(state.get(FACING).getOpposite())).isSolid();
+        Direction support = getSupportDirection(state);
+        BlockPos supportPos = pos.offset(support);
+        if (support.getAxis().isVertical()) {
+            // Floor and ceiling clocks only need a small surface, so they also fit on tables, fences and posts
+            return Block.sideCoversSmallSquare(world, supportPos, support.getOpposite());
+        }
+        return world.getBlockState(supportPos).isSolid();
     }
 
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        BlockState blockState = this.getDefaultState();
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         WorldView worldView = ctx.getWorld();
         BlockPos blockPos = ctx.getBlockPos();
-        Direction[] directions = ctx.getPlacementDirections();
+        BlockState defaultState = this.getDefaultState().with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
 
-        for (Direction direction : directions) {
-            if (direction.getAxis().isHorizontal()) {
-                Direction direction2 = direction.getOpposite();
-                blockState = blockState.with(FACING, direction2);
-                if (blockState.canPlaceAt(worldView, blockPos)) {
-                    return blockState.with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
-                }
+        for (Direction direction : ctx.getPlacementDirections()) {
+            BlockState blockState;
+            if (direction == Direction.DOWN) {
+                blockState = defaultState.with(FACE, BlockFace.FLOOR).with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+            } else if (direction == Direction.UP) {
+                blockState = defaultState.with(FACE, BlockFace.CEILING).with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+            } else {
+                blockState = defaultState.with(FACE, BlockFace.WALL).with(FACING, direction.getOpposite());
+            }
+            if (blockState.canPlaceAt(worldView, blockPos)) {
+                return blockState;
             }
         }
         return null;
     }
+
     @Override
     public BlockState getStateForNeighborUpdate(
             BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos
     ) {
-        // Check if the block can remain in place
-        if (direction.getOpposite() == state.get(FACING) && !state.canPlaceAt(world, pos)) {
+        // Break the clock if whatever it hangs on or stands on is gone
+        if (direction == getSupportDirection(state) && !state.canPlaceAt(world, pos)) {
             return Blocks.AIR.getDefaultState();
         }
 

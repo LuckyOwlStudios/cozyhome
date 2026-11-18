@@ -5,6 +5,8 @@ import net.luckystudio.cozyhome.CozyHome;
 import net.luckystudio.cozyhome.block.util.ModProperties;
 import net.luckystudio.cozyhome.client.ModEntityModelLayers;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.enums.BlockFace;
+import net.minecraft.util.math.Direction;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -54,14 +56,19 @@ public class WallClockBlockEntityRenderer implements BlockEntityRenderer<WallClo
     public void render(WallClockBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         BlockState blockState = entity.getCachedState();
         matrices.push();
+        // Floor and ceiling clocks stand upright in the middle of the block instead of against a wall
+        if (blockState.contains(WallClockBlock.FACE) && blockState.get(WallClockBlock.FACE) != BlockFace.WALL) {
+            Direction facing = blockState.get(WallClockBlock.FACING);
+            matrices.translate(facing.getOffsetX() * 7.5 / 16.0, 0.0, facing.getOffsetZ() * 7.5 / 16.0);
+        }
         matrices.translate(0.5, 1.5, 0.5);
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(ModProperties.setSeatRotationFromFacing(entity.getCachedState())));
         WallClockBlock.ClockType clockType = ((WallClockBlock) blockState.getBlock()).getClockType();
 
         // Interpolate angles for smooth rendering
-        float interpolatedHourAngle = MathHelper.lerp(tickDelta, entity.lastHourHandAngle, entity.currentHourHandAngle);
-        float interpolatedMinuteAngle = MathHelper.lerp(tickDelta, entity.lastMinuteHandAngle, entity.currentMinuteHandAngle);
+        float interpolatedHourAngle = MathHelper.lerpAngleDegrees(tickDelta, entity.lastHourHandAngle, entity.currentHourHandAngle);
+        float interpolatedMinuteAngle = MathHelper.lerpAngleDegrees(tickDelta, entity.lastMinuteHandAngle, entity.currentMinuteHandAngle);
 
         // Set angles in the model
         this.wall_clock.setAngles(

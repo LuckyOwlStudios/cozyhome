@@ -34,5 +34,6 @@ public class CozyHomeDataGenerator {
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(),
                 List.of(new LootTableProvider.LootTypeGenerator(ModLootTableProvider::new, LootContextTypes.BLOCK)), lookup));
         generator.addProvider(event.includeServer(), new ModRecipeProvider(output, lookup));
+        generator.addProvider(event.includeServer(), new SawmillRecipeProvider(output));
     }
 }

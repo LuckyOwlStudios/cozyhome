@@ -8,6 +8,7 @@ import net.luckystudio.cozyhome.block.custom.drawers.DrawerBlock;
 import net.luckystudio.cozyhome.block.custom.seatable.couches.CouchBlock;
 import net.luckystudio.cozyhome.block.custom.horizontal_connecting_blocks.LargeStumpBlock;
 import net.luckystudio.cozyhome.block.custom.horizontal_connecting_blocks.ShelfTableBlock;
+import net.luckystudio.cozyhome.block.custom.horizontal_connecting_blocks.ClassicTableBlock;
 import net.luckystudio.cozyhome.block.custom.horizontal_connecting_blocks.TableBlock;
 import net.luckystudio.cozyhome.block.custom.seatable.sofas.SofaBlock;
 import net.luckystudio.cozyhome.block.custom.seatable.chairs.ChairBlock;
@@ -25,6 +26,7 @@ import net.luckystudio.cozyhome.block.custom.wall_mirrors.WallMirrorBlock;
 import net.luckystudio.cozyhome.block.util.ModBlockUtilities;
 import net.luckystudio.cozyhome.block.custom.water_holding_blocks.sink.SinkBlock;
 import net.luckystudio.cozyhome.item.custom.DyedBlockItem;
+import net.minecraft.util.Rarity;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -67,7 +69,7 @@ public class ModBlocks {
     }
 
     private static Block createTable(Block block) {
-        return new TableBlock(AbstractBlock.Settings.copy(block).dynamicBounds());
+        return new ClassicTableBlock(AbstractBlock.Settings.copy(block).dynamicBounds());
     }
 
     private static Block createShelfTable(Block block) {
@@ -236,7 +238,7 @@ public class ModBlocks {
                     .dynamicBounds()
     ));
 
-    public static final Block OMINOUS_TABLE = registerBlock("ominous_table", new TableBlock(
+    public static final Block OMINOUS_TABLE = registerBlock("ominous_table", new ClassicTableBlock(
             AbstractBlock.Settings.create()
                     .hardness(5)
                     .resistance(5)
@@ -516,7 +518,7 @@ public class ModBlocks {
     // Helper Method for Register Block Method (Handles rarity dynamically)
     private static void registerBlockItems(String name, Block block) {
         Registry.register(Registries.ITEM, Identifier.of(CozyHome.MOD_ID, name),
-                new BlockItem(block, new Item.Settings()));
+                new BlockItem(block, itemSettings(name)));
     }
 
     // Register Block Method
@@ -528,7 +530,14 @@ public class ModBlocks {
     // Helper Method for Register Block Method (Handles rarity dynamically)
     private static void registerDyedBlockItems(String name, Block block) {
         Registry.register(Registries.ITEM, Identifier.of(CozyHome.MOD_ID, name),
-                new DyedBlockItem(block, new Item.Settings()));
+                new DyedBlockItem(block, itemSettings(name)));
+    }
+
+    // Undead and ominous furniture is a little rarer than the rest
+    private static Item.Settings itemSettings(String name) {
+        Item.Settings settings = new Item.Settings();
+        if (name.startsWith("undead_") || name.startsWith("ominous_")) settings.rarity(Rarity.UNCOMMON);
+        return settings;
     }
 
     // Registering Blocks

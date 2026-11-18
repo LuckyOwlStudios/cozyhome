@@ -8,6 +8,9 @@ import net.luckystudio.cozyhome.block.util.enums.DoubleLongPart;
 import net.luckystudio.cozyhome.block.util.interfaces.SeatBlock;
 import net.luckystudio.cozyhome.block.util.interfaces.WaterHoldingBlock;
 import net.luckystudio.cozyhome.util.ModScreenTexts;
+import net.luckystudio.cozyhome.block.util.LiquidHelper;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -205,41 +208,33 @@ public class BathTubBlock extends BlockWithEntity implements Waterloggable, Seat
             return ItemActionResult.SUCCESS;
         }
 
-        // --- 1. Filling a bucket from a full block ---
-        if (item == Items.BUCKET && level >= 1) {
-            ItemStack filledBucket = contents == ContainsBlock.WATER ? new ItemStack(Items.WATER_BUCKET) : new ItemStack(Items.LAVA_BUCKET);
-            SoundEvent soundEvent = contents == ContainsBlock.WATER ? SoundEvents.ITEM_BUCKET_FILL : SoundEvents.ITEM_BUCKET_FILL_LAVA;
-            player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, filledBucket));
-            player.incrementStat(Stats.USE_CAULDRON);
-            player.incrementStat(Stats.USED.getOrCreateStat(item));
-            world.playSound(null, pos, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            if (level - 1 == 0) {
-                world.setBlockState(pos, state.with(LEVEL, 0).with(CONTAINS, ContainsBlock.NONE), 3);
-                world.setBlockState(getOtherPartPos(state, pos), getOtherPartState(state, world, pos).with(LEVEL, 0).with(CONTAINS, ContainsBlock.NONE), 3);
-            } else {
-                world.setBlockState(pos, state.with(LEVEL, level - 1), 3);
-                world.setBlockState(getOtherPartPos(state, pos), getOtherPartState(state, world, pos).with(LEVEL, level - 1), 3);
+        // --- 1. Filling a bucket from the tub (any fluid that has a bucket) ---
+        if (item == Items.BUCKET && level >= 1 && contents != ContainsBlock.NONE) {
+            Fluid fluid = LiquidHelper.getFluid(state, world, pos);
+            ItemStack filledBucket = LiquidHelper.filledBucket(fluid);
+            if (!filledBucket.isEmpty()) {
+                player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, filledBucket));
+                player.incrementStat(Stats.USE_CAULDRON);
+                player.incrementStat(Stats.USED.getOrCreateStat(item));
+                world.playSound(null, pos, LiquidHelper.fillSound(fluid), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                setLiquid(state, world, pos, level - 1 == 0 ? Fluids.EMPTY : fluid, level - 1);
+                world.emitGameEvent(null, GameEvent.FLUID_PICKUP, pos);
+                return ItemActionResult.SUCCESS;
             }
-            world.emitGameEvent(null, GameEvent.FLUID_PICKUP, pos);
-            return ItemActionResult.SUCCESS;
         }
 
-        // --- 2. Pouring water/lava bucket into the block ---
-        if ((item == Items.WATER_BUCKET || item == Items.LAVA_BUCKET) && level < 2) {
-            ContainsBlock newContents = item == Items.WATER_BUCKET ? ContainsBlock.WATER : ContainsBlock.LAVA;
-
+        // --- 2. Pouring any bucket of liquid (vanilla or modded) into the tub ---
+        Fluid bucketFluid = LiquidHelper.fluidInBucket(stack);
+        if (bucketFluid != Fluids.EMPTY && level < 2) {
             // Prevent mixing fluids
-            if (contents != ContainsBlock.NONE && contents != newContents) {
+            if (!LiquidHelper.canMix(LiquidHelper.getFluid(state, world, pos), bucketFluid)) {
                 return SeatBlock.sitDown(state, world, pos, player);
             }
-
-            SoundEvent soundEvent = newContents == ContainsBlock.WATER ? SoundEvents.ITEM_BUCKET_EMPTY : SoundEvents.ITEM_BUCKET_EMPTY_LAVA;
             player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.BUCKET)));
             player.incrementStat(Stats.FILL_CAULDRON);
             player.incrementStat(Stats.USED.getOrCreateStat(item));
-            world.setBlockState(pos, state.with(LEVEL, level + 1).with(CONTAINS, newContents), 3);
-            world.setBlockState(getOtherPartPos(state, pos), getOtherPartState(state, world, pos).with(LEVEL, level + 1).with(CONTAINS, newContents), 3);
-            world.playSound(null, pos, soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            setLiquid(state, world, pos, bucketFluid, level + 1);
+            world.playSound(null, pos, LiquidHelper.emptySound(bucketFluid), SoundCategory.BLOCKS, 1.0F, 1.0F);
             world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
             return ItemActionResult.SUCCESS;
         }
@@ -374,9 +369,8 @@ public class BathTubBlock extends BlockWithEntity implements Waterloggable, Seat
     @Override
     public Direction pullingDirection(BlockState state, World world, BlockPos pos) {
         for (Direction direction : getDirectionsToPull(state)) {
-            BlockPos offsetPos = pos.offset(direction);
-            BlockState offsetState = world.getBlockState(offsetPos);
-            if (offsetState.getFluidState().isIn(FluidTags.WATER) || offsetState.getFluidState().isIn(FluidTags.LAVA) || offsetState.getBlock() == Blocks.WATER_CAULDRON || offsetState.getBlock() == Blocks.LAVA_CAULDRON) {
+            Fluid fluid = LiquidHelper.pullableFluid(world.getBlockState(pos.offset(direction)));
+            if (fluid != Fluids.EMPTY && LiquidHelper.canMix(LiquidHelper.getFluid(state, world, pos), fluid)) {
                 return direction;
             }
         }
@@ -387,45 +381,37 @@ public class BathTubBlock extends BlockWithEntity implements Waterloggable, Seat
         return state.get(LEVEL) == 2;
     }
 
+    /** Sets the liquid and level on both halves of the tub. */
+    private static void setLiquid(BlockState state, World world, BlockPos pos, Fluid fluid, int level) {
+        Fluid newFluid = level <= 0 ? Fluids.EMPTY : fluid;
+        int newLevel = Math.max(0, level);
+        BlockPos otherPos = getOtherPartPos(state, pos);
+        BlockState otherState = world.getBlockState(otherPos);
+        world.setBlockState(pos, LiquidHelper.withFluid(world, pos, state, newFluid).with(LEVEL, newLevel), 3);
+        if (otherState.getBlock() instanceof BathTubBlock) {
+            world.setBlockState(otherPos, LiquidHelper.withFluid(world, otherPos, otherState, newFluid).with(LEVEL, newLevel), 3);
+        }
+    }
+
     @Override
     public void addLiquid(BlockState state, World world, BlockPos pos, BlockState pullState, Direction pullDirection) {
-        int level = state.get(LEVEL);
-        int newLevel = Math.min(2, level + 1); // ensures level never goes above 2
+        BlockPos pullPos = pos.offset(pullDirection);
+        Fluid fluid = LiquidHelper.pullableFluid(pullState);
+        if (fluid == Fluids.EMPTY || !LiquidHelper.canMix(LiquidHelper.getFluid(state, world, pos), fluid)) return;
+        int newLevel = Math.min(2, state.get(LEVEL) + 1); // ensures level never goes above 2
 
-        ContainsBlock contains = ContainsBlock.NONE;
-
-        // Add  1 level of water without removing water from the block
-        if (pullState.getFluidState().isIn(FluidTags.WATER) || pullState.contains(Properties.WATERLOGGED) && pullState.get(Properties.WATERLOGGED)) {
-            contains = ContainsBlock.WATER;
+        // Cauldrons are emptied, lava and other fluid sources are used up, water sources are infinite
+        if (pullState.getBlock() == Blocks.WATER_CAULDRON || pullState.getBlock() == Blocks.LAVA_CAULDRON) {
+            world.setBlockState(pullPos, Blocks.CAULDRON.getDefaultState(), 3);
+        } else {
+            LiquidHelper.drainSource(world, pullPos, pullState, fluid);
         }
-
-        // Add 1 level of lava while removing lava from the block
-        if (pullState.getFluidState().isIn(FluidTags.LAVA)) {
-            world.setBlockState(pos.offset(pullDirection), Blocks.AIR.getDefaultState(), 3);
-            contains = ContainsBlock.LAVA;
-        }
-
-        // Adding 1 water to the block while removing water from the block
-        if (pullState.getBlock() == Blocks.WATER_CAULDRON) {
-            world.setBlockState(pos.offset(pullDirection), Blocks.CAULDRON.getDefaultState(), 3);
-            contains = ContainsBlock.WATER;
-        }
-
-        // Adding 1 lava to the block while removing lava from the block
-        if (pullState.getBlock() == Blocks.LAVA_CAULDRON) {
-            world.setBlockState(pos.offset(pullDirection), Blocks.CAULDRON.getDefaultState(), 3);
-            contains = ContainsBlock.LAVA;
-        }
-        world.setBlockState(pos, state.with(LEVEL, newLevel).with(CONTAINS, contains), 3);
-        world.setBlockState(getOtherPartPos(state, pos), getOtherPartState(state, world, pos).with(LEVEL, newLevel).with(CONTAINS, contains), 3);
+        setLiquid(state, world, pos, fluid, newLevel);
     }
 
     public void removeLiquid(BlockState state, World world, BlockPos pos) {
-        int level = state.get(LEVEL);
-        int newLevel = Math.max(0, level - 1); // ensures level never goes below 0
-        ContainsBlock contains = newLevel == 0 ? ContainsBlock.NONE : state.get(CONTAINS);
-        world.setBlockState(pos, state.with(LEVEL, newLevel).with(CONTAINS, contains), 3);
-        world.setBlockState(getOtherPartPos(state, pos), getOtherPartState(state, world, pos).with(LEVEL, newLevel).with(CONTAINS, contains), 3);
+        int newLevel = Math.max(0, state.get(LEVEL) - 1); // ensures level never goes below 0
+        setLiquid(state, world, pos, LiquidHelper.getFluid(state, world, pos), newLevel);
         world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(state));
         world.emitGameEvent(GameEvent.BLOCK_CHANGE, getOtherPartPos(state, pos), GameEvent.Emitter.of(getOtherPartState(state, world, pos)));
     }

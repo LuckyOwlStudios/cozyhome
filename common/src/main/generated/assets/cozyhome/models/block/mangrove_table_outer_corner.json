@@ -1,0 +1,9 @@
+{
+  "parent": "cozyhome:block/table/classic_table_outer_corner",
+  "textures": {
+    "legs": "cozyhome:block/table/mangrove_table_legs",
+    "particle": "minecraft:block/mangrove_planks",
+    "sides": "cozyhome:block/table/mangrove_table_sides",
+    "top": "cozyhome:block/table/mangrove_table_top"
+  }
+}

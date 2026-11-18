@@ -23,3 +23,6 @@ accessible field net/minecraft/data/client/BlockStateModelGenerator modelCollect
 accessible method net/minecraft/data/client/BlockStateModelGenerator registerParentedItemModel (Lnet/minecraft/block/Block;Lnet/minecraft/util/Identifier;)V
 accessible method net/minecraft/data/client/BlockStateModelGenerator registerBuiltinWithParticle (Lnet/minecraft/block/Block;Lnet/minecraft/util/Identifier;)V
 accessible method net/minecraft/data/client/TextureKey of (Ljava/lang/String;)Lnet/minecraft/data/client/TextureKey;
+
+# Used by LiquidHelper to find out which fluid any bucket (including modded ones) holds
+accessible field net/minecraft/item/BucketItem fluid Lnet/minecraft/fluid/Fluid;

@@ -4,7 +4,8 @@ import net.minecraft.util.StringIdentifiable;
 
 public enum TableTypes implements StringIdentifiable {
     GENERIC(""),
-    SHELF("shelf_");
+    SHELF("shelf_"),
+    CLASSIC("classic_");
 
     private final String name;
 

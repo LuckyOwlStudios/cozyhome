@@ -7,6 +7,11 @@ import net.luckystudio.cozyhome.block.util.enums.ContainsBlock;
 import net.luckystudio.cozyhome.block.util.interfaces.AllSidesConnectingBlock;
 import net.luckystudio.cozyhome.util.ModScreenTexts;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.luckystudio.cozyhome.block.util.LiquidHelper;
+import net.minecraft.fluid.FlowableFluid;
+import net.minecraft.fluid.Fluid;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
@@ -40,7 +45,7 @@ import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
 
-public class FountainBlock extends AbstractHorizontalConnectingBlock implements AllSidesConnectingBlock {
+public class FountainBlock extends AbstractHorizontalConnectingBlock implements AllSidesConnectingBlock, BlockEntityProvider {
     public static final MapCodec<FountainBlock> CODEC = createCodec(FountainBlock::new);
     public static final EnumProperty<ContainsBlock> CONTAINS = ModProperties.CONTAINS;
 
@@ -73,40 +78,38 @@ public class FountainBlock extends AbstractHorizontalConnectingBlock implements 
     }
 
     @Override
+    public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new FountainBlockEntity(pos, state);
+    }
+
+    @Override
     protected ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ContainsBlock contents = state.get(CONTAINS);
-        if (stack.getItem() == Items.WATER_BUCKET) {
+
+        // Pour in any bucket of liquid, vanilla or modded
+        Fluid bucketFluid = LiquidHelper.fluidInBucket(stack);
+        if (bucketFluid != Fluids.EMPTY) {
+            if (LiquidHelper.getFluid(state, world, pos) == bucketFluid) return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.BUCKET)));
-            return changeState(state, ContainsBlock.WATER, SoundEvents.ITEM_BUCKET_EMPTY, world, pos, player);
-        } else if (stack.getItem() == Items.LAVA_BUCKET) {
-            player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.BUCKET)));
-            return changeState(state, ContainsBlock.LAVA, SoundEvents.ITEM_BUCKET_EMPTY_LAVA, world, pos, player);
-        } else if (contents != ContainsBlock.NONE) {
-            if (stack.getItem() == Items.BUCKET) {
-                if (contents == ContainsBlock.WATER) {
-                    player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.WATER_BUCKET)));
-                    return changeState(state, ContainsBlock.NONE, SoundEvents.ITEM_BUCKET_FILL, world, pos, player);
-                } else if (contents == ContainsBlock.LAVA) {
-                    player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.LAVA_BUCKET)));
-                    return changeState(state, ContainsBlock.NONE, SoundEvents.ITEM_BUCKET_FILL_LAVA, world, pos, player);
-                }
-            } else {
-                return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-            }
+            return changeState(LiquidHelper.withFluid(world, pos, state, bucketFluid), LiquidHelper.emptySound(bucketFluid), world, pos, player);
+        }
+
+        // Scoop the liquid back out with an empty bucket
+        if (contents != ContainsBlock.NONE && stack.getItem() == Items.BUCKET) {
+            Fluid fluid = LiquidHelper.getFluid(state, world, pos);
+            ItemStack filledBucket = LiquidHelper.filledBucket(fluid);
+            if (filledBucket.isEmpty()) return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, filledBucket));
+            return changeState(LiquidHelper.withFluid(world, pos, state, Fluids.EMPTY), LiquidHelper.fillSound(fluid), world, pos, player);
         }
         return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    private static ItemActionResult changeState(BlockState state, ContainsBlock newContains, SoundEvent soundEvent, World world, BlockPos pos, PlayerEntity player) {
-        // Only run if the state actually should change
-        if (state.get(CONTAINS) != newContains) {
-            state = state.with(ModProperties.CONTAINS, newContains);
-            world.setBlockState(pos, state, Block.NOTIFY_ALL);
-            world.playSound(player, pos, soundEvent, SoundCategory.BLOCKS, 1F, 1f);
-            world.emitGameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
-            return ItemActionResult.SUCCESS;
-        }
-        return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    private static ItemActionResult changeState(BlockState newState, SoundEvent soundEvent, World world, BlockPos pos, PlayerEntity player) {
+        world.setBlockState(pos, newState, Block.NOTIFY_ALL);
+        world.playSound(player, pos, soundEvent, SoundCategory.BLOCKS, 1F, 1f);
+        world.emitGameEvent(player, GameEvent.BLOCK_ACTIVATE, pos);
+        return ItemActionResult.SUCCESS;
     }
 
     @Override
@@ -154,6 +157,7 @@ public class FountainBlock extends AbstractHorizontalConnectingBlock implements 
         tooltip.add(Text.translatable("tooltip.cozyhome.block.can_hold").formatted(Formatting.GRAY));
         tooltip.add(ModScreenTexts.entry().append(Text.translatable("block.minecraft.water")));
         tooltip.add(ModScreenTexts.entry().append(Text.translatable("block.minecraft.lava")));
+        tooltip.add(ModScreenTexts.entry().append(Text.translatable("tooltip.cozyhome.any_other_liquid")));
     }
 
     @Override
@@ -170,14 +174,10 @@ public class FountainBlock extends AbstractHorizontalConnectingBlock implements 
 
     // Spill out liquids when the block is destroyed
     private static void onBlockDestroyed(World world, BlockState state, BlockPos pos) {
-            if (state.get(CONTAINS) == ContainsBlock.WATER) {
-                FluidState fluidState = Fluids.FLOWING_WATER.getDefaultState().with(Properties.LEVEL_1_8, 4);
-                world.setBlockState(pos, fluidState.getBlockState());
-            }
-            if (state.get(CONTAINS) == ContainsBlock.LAVA) {
-                FluidState fluidState = Fluids.FLOWING_LAVA.getDefaultState().with(Properties.LEVEL_1_8, 4);
-                world.setBlockState(pos, fluidState.getBlockState());
-            }
+        Fluid fluid = LiquidHelper.getFluid(state, world, pos);
+        if (fluid instanceof FlowableFluid flowable) {
+            world.setBlockState(pos, flowable.getFlowing(4, false).getBlockState());
+        }
     }
 
     @Override

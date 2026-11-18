@@ -37,9 +37,12 @@ public class ClockFunctionalityHandler {
                     lerpWrappedAngle(blockEntity.getCurrentMinuteHandAngle(), targetMinuteHandAngle)
             );
         } else {
-            long worldTime = blockEntity.getWorld().getTimeOfDay() % 24000;
-            float hour = (worldTime / 1000.0f) % 12;
-            float minute = (worldTime % 1000) / 16.6667f;
+            // Tick like a real clock: the hands only move once per in-game minute
+            // (24000 ticks = 1440 minutes), instead of gliding every tick.
+            long worldTime = Math.floorMod(blockEntity.getWorld().getTimeOfDay(), 24000L);
+            long totalMinutes = worldTime * 1440L / 24000L;
+            float minute = totalMinutes % 60;
+            float hour = (totalMinutes / 60) % 12 + minute / 60.0f;
 
             blockEntity.setLastHourHandAngle(blockEntity.getCurrentHourHandAngle());
             blockEntity.setCurrentHourHandAngle(wrapAngle(hour * 30.0f + 180.0f));

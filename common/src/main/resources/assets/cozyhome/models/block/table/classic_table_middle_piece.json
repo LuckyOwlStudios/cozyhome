@@ -1,0 +1,18 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"top": "cozyhome:block/table/oak_table_top"
+	},
+	"elements": [
+		{
+			"from": [0, 13, 0],
+			"to": [8, 16, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"up": {"uv": [8, 8, 16, 16], "rotation": 180, "texture": "#top", "cullface": "up"},
+				"down": {"uv": [8, 8, 16, 16], "rotation": 90, "texture": "#top"}
+			}
+		}
+	]
+}

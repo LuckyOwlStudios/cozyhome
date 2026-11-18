@@ -322,6 +322,7 @@
   "tooltip.cozyhome.lunar_tips": "Learn interesting facts about the lunar cycles",
   "tooltip.cozyhome.can_tuck_into_certain_blocks": "Can Tuck into certain Blocks",
   "tooltip.cozyhome.block.can_hold": "Can Hold: ",
+  "tooltip.cozyhome.any_other_liquid": "Any other liquid",
   "tooltip.cozyhome.dyeable": "§7Dyeable",
   "tooltip.cozyhome.applied_when_interacted_with": "Applied When Interacted With:",
   "tooltip.cozyhome.pours_liquid_from_liquid_holding_blocks_into_others": "Pours Liquid From Liquid Holding Blocks Into Others",

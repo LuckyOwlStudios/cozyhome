@@ -8,8 +8,8 @@ import net.minecraft.structure.processor.StructureProcessor;
 import net.minecraft.structure.processor.StructureProcessorType;
 
 public class ModStructureProcessors {
-    public static final StructureProcessorType<VillageFurnitureProcessor> VILLAGE_FURNITURE =
-            register("village_furniture", VillageFurnitureProcessor.CODEC);
+    public static final StructureProcessorType<FurnishedStructureProcessor> FURNISHED =
+            register("furnished", FurnishedStructureProcessor.CODEC);
 
     private static <P extends StructureProcessor> StructureProcessorType<P> register(String name, MapCodec<P> codec) {
         StructureProcessorType<P> type = () -> codec;

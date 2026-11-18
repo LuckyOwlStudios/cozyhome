@@ -46,7 +46,8 @@ public class CrimsonLampBlock extends AbstractLampBlock {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (state.get(LIT)) {
+        // Only spawn a spore now and then so the lamp doesn't fill the room with particles
+        if (state.get(LIT) && random.nextInt(4) == 0) {
             int i = pos.getX();
             int j = pos.getY();
             int k = pos.getZ();
